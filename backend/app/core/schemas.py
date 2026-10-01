@@ -3,8 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from app.core.enums import AccidentStatus, AmbulanceStatus, Severity
-
+from app.core.enums import AmbulanceStatus, EmergencyStatus, Severity
 
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
