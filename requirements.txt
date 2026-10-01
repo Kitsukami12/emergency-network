@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+pydantic>=2
+sqlmodel
+osmnx
+networkx
+scipy
+numpy
+pandas
+python-multipart
+pytest
