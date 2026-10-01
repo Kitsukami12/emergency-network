@@ -1,0 +1,14 @@
+[
+  {"ambulance_id": "A01", "base_name": "Apollo Hospital", "lat": 22.758564766406206, "lon": 75.88885515177756},
+  {"ambulance_id": "A02", "base_name": "MY Hospital", "lat": 22.7235, "lon": 75.8665},
+  {"ambulance_id": "A03", "base_name": "Bombay Hospital", "lat": 22.754511770307783, "lon": 75.90325920239853},
+  {"ambulance_id": "A04", "base_name": "Sri Aurobindo Institute", "lat":  22.801734992604445, "lon": 75.8511123051933},
+  {"ambulance_id": "A05", "base_name": "Shalby Hospital", "lat": 22.73028114068918, "lon": 75.87982034804821},
+  {"ambulance_id": "A06", "base_name": "Choitram Hospital", "lat": 22.69048074550048, "lon": 75.7559566475738},
+  {"ambulance_id": "A07", "base_name": "Rau area hospital", "lat": 22.6420, "lon": 75.8040},
+  {"ambulance_id": "A08", "base_name": "Nakshatra Hospital", "lat": 22.708380114094417, "lon": 75.90598667420974},
+  {"ambulance_id": "A09", "base_name": "RK Hospital", "lat": 22.698733261765238, "lon": 75.87811815903574},
+  {"ambulance_id": "A10", "base_name": "Khandwa Road hospital", "lat": 22.6800, "lon": 75.8800},
+  {"ambulance_id": "A11", "base_name": "Dolphin Hospital", "lat": 22.72551394484527, "lon": 75.87401282650033},
+  {"ambulance_id": "A12", "base_name": "Indore Hospital", "lat": 22.719497095969672, "lon": 75.85616004323104}
+]
