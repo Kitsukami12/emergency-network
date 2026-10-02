@@ -29,3 +29,7 @@ for m in ["mean", "median", "p90", "max", "wait", "weighted", "unserved"]:
         v = [r[m] for r in out[name]]
         row += f"{statistics.mean(v):>10.2f} ±{statistics.stdev(v):>5.2f}"
     print(row)
+
+wins = sum(h["mean"] < n["mean"] for n, h in zip(out["nearest"], out["hungarian"]))
+print(f"\nHungarian had lower mean response in {wins}/{args.seeds} seeds.")
+
