@@ -4,6 +4,7 @@ ROOT = Path(__file__).resolve().parents[3]   # project root
 GRAPH_FILE = ROOT / "data" / "graph" / "indore.graphml"
 AMBULANCE_SEED = ROOT / "data" / "seeds" / "ambulances.json"
 LOG_DIR = ROOT / "logs"
+DB_FILE = ROOT / "data" / "emergency.db"
 
 # Map boundaries: paste the numbers you just printed
 LAT_MIN, LAT_MAX = 22.6297, 22.8095
