@@ -11,6 +11,8 @@ from app.core.seeds import load_ambulances
 from app.services.astar import route_between
 from fastapi.responses import FileResponse
 from app.core.config import ROOT
+from app.core.enums import AccidentStatus, AmbulanceStatus
+from app.services.dispatch import STRATEGIES, dispatch_pending
 
 
 @asynccontextmanager
@@ -75,3 +77,35 @@ def change_accident_status(accident_id: str, change: StatusChange):
         raise HTTPException(404, "Accident not found")
     except db.IllegalTransition as e:
         raise HTTPException(409, str(e))
+
+
+NEXT_STATUS = {
+    AccidentStatus.AMBULANCE_ASSIGNED: AccidentStatus.EN_ROUTE,
+    AccidentStatus.EN_ROUTE: AccidentStatus.ARRIVED,
+    AccidentStatus.ARRIVED: AccidentStatus.RESOLVED,
+}
+
+
+@app.post("/dispatch")
+def dispatch(strategy: str = "hungarian"):
+    if strategy not in STRATEGIES:
+        raise HTTPException(400, f"strategy must be one of {list(STRATEGIES)}")
+    return dispatch_pending(strategy)
+
+
+@app.post("/accidents/{accident_id}/advance", response_model=Accident)
+def advance(accident_id: str):
+    """Demo control: move an accident one step along its journey."""
+    acc = db.get_accident(accident_id)
+    if acc is None:
+        raise HTTPException(404, "Accident not found")
+    nxt = NEXT_STATUS.get(acc.status)
+    if nxt is None:
+        raise HTTPException(409, f"Cannot advance from {acc.status.value}")
+    updated = db.change_status(accident_id, nxt)
+    if acc.assigned_ambulance_id:
+        if nxt == AccidentStatus.ARRIVED:
+            db.set_ambulance_status(acc.assigned_ambulance_id, AmbulanceStatus.AT_SCENE)
+        elif nxt == AccidentStatus.RESOLVED:
+            db.set_ambulance_status(acc.assigned_ambulance_id, AmbulanceStatus.AVAILABLE)
+    return updated

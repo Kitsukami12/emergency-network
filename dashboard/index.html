@@ -1,59 +1,161 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Emergency Network</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <style>
-    body { margin: 0; font-family: sans-serif; }
-    #bar { padding: 10px 16px; background: #14232b; color: white; }
-    #map { height: calc(100vh - 44px); }
-  </style>
+<meta charset="utf-8">
+<title>AI Emergency Response Network</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root { --bg:#0b171d; --panel:#12242d; --line:#20404d; --text:#e6f0f3; --mute:#88a3ae;
+          --accent:#38bdf8; --green:#22c55e; --amber:#f59e0b; }
+  * { box-sizing: border-box; }
+  body { margin:0; height:100vh; display:flex; flex-direction:column;
+         background:var(--bg); color:var(--text); font-family:system-ui,sans-serif; }
+  header { display:flex; align-items:center; gap:14px; padding:10px 18px;
+           background:var(--panel); border-bottom:1px solid var(--line); }
+  header h1 { font-size:17px; margin:0; font-weight:650; }
+  .badge { font-size:11px; padding:3px 8px; border-radius:999px;
+           border:1px solid var(--amber); color:var(--amber); }
+  .spacer { flex:1; }
+  select, button { background:#0d1d25; color:var(--text); border:1px solid var(--line);
+                   border-radius:6px; padding:7px 10px; font-size:13px; }
+  button { cursor:pointer; } button:hover { border-color:var(--accent); }
+  button.primary { background:var(--accent); color:#04222f; border-color:var(--accent); font-weight:650; }
+  #kpis { display:flex; gap:12px; padding:12px 18px; }
+  .kpi { flex:1; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 14px; }
+  .kpi .n { font-size:26px; font-weight:700; } .kpi .l { font-size:12px; color:var(--mute); }
+  main { flex:1; display:flex; gap:12px; padding:0 18px 14px; min-height:0; }
+  #map { flex:1; border-radius:10px; border:1px solid var(--line); }
+  aside { width:340px; background:var(--panel); border:1px solid var(--line);
+          border-radius:10px; display:flex; flex-direction:column; min-height:0; }
+  aside h2 { margin:0; padding:12px 14px; font-size:13px; color:var(--mute);
+             text-transform:uppercase; letter-spacing:.06em; border-bottom:1px solid var(--line); }
+  #list { overflow-y:auto; flex:1; }
+  .item { padding:10px 14px; border-bottom:1px solid var(--line); cursor:pointer; }
+  .item:hover { background:#173039; }
+  .sev { font-size:11px; font-weight:700; padding:2px 7px; border-radius:4px; color:#111; margin-right:6px; }
+  .sub { font-size:12px; color:var(--mute); margin-top:4px; display:flex; justify-content:space-between; align-items:center; }
+  .item button { padding:3px 8px; font-size:11px; }
+  #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--panel);
+           border:1px solid var(--accent); padding:10px 16px; border-radius:8px; display:none; }
+  .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9); }
+</style>
 </head>
 <body>
-  <div id="bar">Emergency Network | <span id="stats">loading...</span>
-    | click the map to report an accident</div>
+<header>
+  <h1>AI Emergency Response Network</h1>
+  <span class="badge">Decision-support prototype</span>
+  <span class="spacer"></span>
+  <label style="font-size:12px;color:var(--mute)">Click-to-report severity</label>
+  <select id="sev"><option>LOW</option><option>MEDIUM</option><option selected>HIGH</option><option>CRITICAL</option></select>
+  <label style="font-size:12px;color:var(--mute)">Strategy</label>
+  <select id="strategy"><option value="hungarian">Hungarian (optimized)</option><option value="nearest">Nearest (baseline)</option></select>
+  <button class="primary" onclick="dispatch()">Dispatch</button>
+</header>
+
+<section id="kpis">
+  <div class="kpi"><div class="n" id="k-active">0</div><div class="l">Active emergencies</div></div>
+  <div class="kpi"><div class="n" id="k-wait">0</div><div class="l">Awaiting ambulance</div></div>
+  <div class="kpi"><div class="n" id="k-disp">0</div><div class="l">Ambulances dispatched</div></div>
+  <div class="kpi"><div class="n" id="k-free">0</div><div class="l">Ambulances available</div></div>
+</section>
+
+<main>
   <div id="map"></div>
+  <aside><h2>Incidents</h2><div id="list"></div></aside>
+</main>
+<div id="toast"></div>
+
 <script>
+const SEV = { LOW:'#eab308', MEDIUM:'#f97316', HIGH:'#ef4444', CRITICAL:'#b91c1c' };
+const AMB = { AVAILABLE:'#22c55e', DISPATCHED:'#f59e0b' };
+const DONE = ['RESOLVED', 'CANCELLED'];
+
 const map = L.map('map').setView([22.7196, 75.8577], 12);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-  { attribution: '&copy; OpenStreetMap' }).addTo(map);
+  { attribution: '&copy; OpenStreetMap', maxZoom: 19 }).addTo(map);
+  
+const markers = L.layerGroup().addTo(map);
+const routeLayer = L.layerGroup().addTo(map);
+const routeCache = {};   // accident_id -> route (fetched once)
 
-const layer = L.layerGroup().addTo(map);
-const sevColor = { LOW: 'orange', MEDIUM: 'darkorange', HIGH: 'red', CRITICAL: 'darkred' };
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 2500);
+}
 
 async function refresh() {
   const [ambs, accs] = await Promise.all([
     fetch('/ambulances').then(r => r.json()),
     fetch('/accidents').then(r => r.json()),
   ]);
-  layer.clearLayers();
+  const ambById = Object.fromEntries(ambs.map(a => [a.ambulance_id, a]));
+  const active = accs.filter(a => !DONE.includes(a.status));
+
+  // fetch each route once
+  for (const a of active) {
+    const amb = ambById[a.assigned_ambulance_id];
+    if (amb && !routeCache[a.accident_id]) {
+      const q = `from_lat=${amb.location.lat}&from_lon=${amb.location.lon}` +
+                `&to_lat=${a.location.lat}&to_lon=${a.location.lon}`;
+      const res = await fetch('/route?' + q);
+      if (res.ok) routeCache[a.accident_id] = await res.json();
+    }
+  }
+
+  markers.clearLayers(); routeLayer.clearLayers();
   ambs.forEach(a => L.circleMarker([a.location.lat, a.location.lon],
-      { radius: 8, color: 'blue', fillOpacity: 0.8 })
-    .bindPopup(`<b>${a.ambulance_id}</b><br>${a.base_name}<br>${a.status}`)
-    .addTo(layer));
-  accs.forEach(a => L.circleMarker([a.location.lat, a.location.lon],
-      { radius: 10, color: sevColor[a.severity], fillOpacity: 0.9 })
-    .bindPopup(`<b>${a.accident_id}</b><br>${a.severity}<br>${a.status}`)
-    .addTo(layer));
-  document.getElementById('stats').textContent =
-    `${ambs.length} ambulances, ${accs.length} accidents`;
+      { radius: 8, color: '#04222f', weight: 2, fillColor: AMB[a.status] || '#64748b', fillOpacity: 1 })
+    .bindPopup(`<b>${a.ambulance_id}</b><br>${a.base_name}<br>${a.status}`).addTo(markers));
+  active.forEach(a => {
+    L.circleMarker([a.location.lat, a.location.lon],
+      { radius: 11, color: '#fff', weight: 2, fillColor: SEV[a.severity], fillOpacity: 0.95 })
+      .bindPopup(`<b>${a.accident_id}</b><br>${a.severity} · ${a.status}`).addTo(markers);
+    const r = routeCache[a.accident_id];
+    if (r) L.polyline(r.route, { color: '#38bdf8', weight: 4, opacity: 0.85 }).addTo(routeLayer);
+  });
+
+  document.getElementById('k-active').textContent = active.length;
+  document.getElementById('k-wait').textContent = active.filter(a => a.status === 'AWAITING_AMBULANCE').length;
+  document.getElementById('k-disp').textContent = ambs.filter(a => a.status !== 'AVAILABLE').length;
+  document.getElementById('k-free').textContent = ambs.filter(a => a.status === 'AVAILABLE').length;
+
+  document.getElementById('list').innerHTML = active.map(a => {
+    const r = routeCache[a.accident_id];
+    const eta = r ? ` · ETA ${r.estimated_time_min} min · ${r.distance_km} km` : '';
+    const who = a.assigned_ambulance_id ? ` · ${a.assigned_ambulance_id}` : '';
+    const btn = a.assigned_ambulance_id
+      ? `<button onclick="event.stopPropagation();advance('${a.accident_id}')">Advance</button>` : '';
+    return `<div class="item" onclick="map.flyTo([${a.location.lat},${a.location.lon}],14)">
+      <span class="sev" style="background:${SEV[a.severity]}">${a.severity}</span><b>${a.accident_id}</b>
+      <div class="sub"><span>${a.status.replaceAll('_',' ')}${who}${eta}</span>${btn}</div></div>`;
+  }).join('') || '<div class="item" style="color:var(--mute)">No active incidents. Click the map to report one.</div>';
+}
+
+async function dispatch() {
+  const s = document.getElementById('strategy').value;
+  const res = await fetch('/dispatch?strategy=' + s, { method: 'POST' });
+  const out = await res.json();
+  toast(out.length ? `Dispatched ${out.length} ambulance(s) using ${s}` : 'Nothing to dispatch');
+  refresh();
+}
+
+async function advance(id) {
+  const res = await fetch(`/accidents/${id}/advance`, { method: 'POST' });
+  if (!res.ok) toast((await res.json()).detail);
+  refresh();
 }
 
 map.on('click', async e => {
   const res = await fetch('/accidents', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      location: { lat: e.latlng.lat, lon: e.latlng.lng }, severity: 'HIGH' }),
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ location: { lat: e.latlng.lat, lon: e.latlng.lng },
+                           severity: document.getElementById('sev').value }),
   });
-  if (!res.ok) alert((await res.json()).detail);
+  if (!res.ok) toast((await res.json()).detail);
   refresh();
 });
-
-fetch('/route?from_lat=22.7586&from_lon=75.8889&to_lat=22.72&to_lon=75.86')
-  .then(r => r.json())
-  .then(r => L.polyline(r.route, {color: 'green', weight: 5}).addTo(map));
 
 refresh();
 setInterval(refresh, 3000);
