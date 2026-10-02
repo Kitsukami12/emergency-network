@@ -1,5 +1,5 @@
-from app.models.enums import EmergencyStatus as S
-from app.models.transitions import can_transition
+from app.core.enums import AccidentStatus as S
+from app.core.transitions import can_transition
 
 def test_normal_flow_is_allowed():
     assert can_transition(S.DETECTED, S.ASSESSING)

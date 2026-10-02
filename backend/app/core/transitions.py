@@ -1,4 +1,4 @@
-from app.models.enums import EmergencyStatus as S
+from app.core.enums import AccidentStatus as S
 
 ALLOWED = {
     S.DETECTED: {S.ASSESSING, S.NEEDS_VERIFICATION, S.CANCELLED},
