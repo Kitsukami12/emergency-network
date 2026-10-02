@@ -27,3 +27,37 @@ def test_ambulance_not_used_twice(monkeypatch):
     result = assignment.assign_nearest([_amb("A")],
                                        [_acc("ACC-1", "LOW"), _acc("ACC-2", "HIGH")])
     assert result == {"ACC-2": "A"}
+
+def test_hungarian_beats_greedy(monkeypatch):
+    # same 4/5/6/20 example, equal severity so weights don't change the answer
+    monkeypatch.setattr(assignment, "travel_time_matrix",
+                        lambda ambs, accs: [[4, 5], [6, 20]])
+    ambs = [_amb("A"), _amb("B")]
+    accs = [_acc("ACC-1", "HIGH"), _acc("ACC-2", "HIGH")]
+    result = assignment.assign_hungarian(ambs, accs)
+    assert result == {"ACC-1": "B", "ACC-2": "A"}   # total 11, Nearest gives 24
+
+
+def test_hungarian_fewer_ambulances(monkeypatch):
+    # 1 ambulance, 2 accidents: the heavier-weighted (HIGH) one should get it
+    monkeypatch.setattr(assignment, "travel_time_matrix",
+                        lambda ambs, accs: [[4, 5]])
+    result = assignment.assign_hungarian([_amb("A")],
+                                         [_acc("ACC-1", "LOW"), _acc("ACC-2", "HIGH")])
+    assert result == {"ACC-2": "A"}
+
+
+def test_hungarian_beats_greedy(monkeypatch):
+    monkeypatch.setattr(assignment, "travel_time_matrix",
+                        lambda ambs, accs: [[4, 5], [6, 20]])
+    accs = [_acc("ACC-1", "HIGH"), _acc("ACC-2", "HIGH")]
+    result = assignment.assign_hungarian([_amb("A"), _amb("B")], accs)
+    assert result == {"ACC-1": "B", "ACC-2": "A"}   # total 11, Nearest gives 24
+
+
+def test_hungarian_scarce_serves_severe(monkeypatch):
+    monkeypatch.setattr(assignment, "travel_time_matrix",
+                        lambda ambs, accs: [[4, 5]])
+    result = assignment.assign_hungarian([_amb("A")],
+                                         [_acc("ACC-1", "LOW"), _acc("ACC-2", "HIGH")])
+    assert result == {"ACC-2": "A"}
