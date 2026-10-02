@@ -67,3 +67,16 @@ def route_between(lat1, lon1, lat2, lon2):
     result = astar(start, goal)
     if result is None:
         return None
+    seconds, path = result
+
+    distance_m = 0.0
+    for a, b in zip(path, path[1:]):
+        edge = min(G[a][b].values(), key=lambda d: d["travel_time"])
+        distance_m += edge["length"]
+
+    coords = [[G.nodes[n]["y"], G.nodes[n]["x"]] for n in path]
+    return {
+        "distance_km": round(distance_m / 1000, 2),
+        "estimated_time_min": round(seconds / 60, 1),
+        "route": coords,
+    }

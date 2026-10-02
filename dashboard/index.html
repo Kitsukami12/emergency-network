@@ -51,6 +51,10 @@ map.on('click', async e => {
   refresh();
 });
 
+fetch('/route?from_lat=22.7586&from_lon=75.8889&to_lat=22.72&to_lon=75.86')
+  .then(r => r.json())
+  .then(r => L.polyline(r.route, {color: 'green', weight: 5}).addTo(map));
+
 refresh();
 setInterval(refresh, 3000);
 </script>
