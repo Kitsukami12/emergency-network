@@ -1,15 +1,17 @@
 import heapq
 import math
 
-from app.services.routing import get_graph
+from app.services.routing import get_graph, snap_to_node
 
 _MAX_SPEED = None
+
 
 def _max_speed():
     global _MAX_SPEED
     if _MAX_SPEED is None:
         _MAX_SPEED = max(d["speed_kph"] for _, _, d in get_graph().edges(data=True)) / 3.6
     return _MAX_SPEED
+
 
 def haversine_m(lat1, lon1, lat2, lon2):
     """Straight-line distance in meters between two points."""
@@ -28,8 +30,6 @@ def astar(start: int, goal: int):
     gy, gx = G.nodes[goal]["y"], G.nodes[goal]["x"]
 
     def h(n):
-        # TODO 1: straight-line meters from node n to the goal, divided by max_speed
-        #         (this is the heuristic for A* search)
         ny, nlon = G.nodes[n]["y"], G.nodes[n]["x"]
         return haversine_m(ny, nlon, gy, gx) / max_speed
 
@@ -46,17 +46,24 @@ def astar(start: int, goal: int):
                 path.append(node)
             path.reverse()
             return best[goal], path
-            ...
+
         for nbr in G.successors(node):
-            # a graph can have several roads between two junctions: take the fastest
             edge_time = min(d["travel_time"] for d in G[node][nbr].values())
             new_g = best[node] + edge_time
-            # TODO 3: if nbr is unseen OR new_g < best[nbr]:
-            #         record best[nbr], came_from[nbr] = node,
-            #         and push (new_g + h(nbr), nbr) onto the queue
+
             if nbr not in best or new_g < best[nbr]:
                 best[nbr] = new_g
                 came_from[nbr] = node
                 heapq.heappush(queue, (new_g + h(nbr), nbr))
 
     return None
+
+
+def route_between(lat1, lon1, lat2, lon2):
+    """Lat/lon in, route summary out. Returns None if no route."""
+    G = get_graph()
+    start = snap_to_node(lat1, lon1)
+    goal = snap_to_node(lat2, lon2)
+    result = astar(start, goal)
+    if result is None:
+        return None

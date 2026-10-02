@@ -8,6 +8,7 @@ from app.core.config import AMBULANCE_SEED, LAT_MAX, LAT_MIN, LON_MAX, LON_MIN
 from app.core.enums import AccidentStatus
 from app.core.schemas import Accident, AccidentReport, Ambulance
 from app.core.seeds import load_ambulances
+from app.services.astar import route_between
 
 
 @asynccontextmanager
@@ -19,6 +20,13 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="AI Emergency Response Network", lifespan=lifespan)
 
+
+@app.get("/route")
+def get_route(from_lat: float, from_lon: float, to_lat: float, to_lon: float):
+    result = route_between(from_lat, from_lon, to_lat, to_lon)
+    if result is None:
+        raise HTTPException(404, "ROUTE UNAVAILABLE")
+    return result
 
 class StatusChange(BaseModel):
     new_status: AccidentStatus
