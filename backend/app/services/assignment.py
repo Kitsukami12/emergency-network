@@ -20,14 +20,23 @@ def severity_weight(accident: Accident) -> float:
     return SEVERITY_WEIGHT[accident.severity.value]
 
 
+_times_cache = {}
+
+
+def times_from(node):
+    """Travel time in seconds from `node` to every junction. Cached."""
+    if node not in _times_cache:
+        _times_cache[node] = nx.single_source_dijkstra_path_length(
+            get_graph(), node, weight="travel_time")
+    return _times_cache[node]
+
+
 def travel_time_matrix(ambulances: list[Ambulance], accidents: list[Accident]):
     """matrix[i][j] = seconds for ambulance i to reach accident j (None if unreachable)."""
-    G = get_graph()
     goal_nodes = [snap_to_node(a.location.lat, a.location.lon) for a in accidents]
     matrix = []
     for amb in ambulances:
-        start = snap_to_node(amb.location.lat, amb.location.lon)
-        times = nx.single_source_dijkstra_path_length(G, start, weight="travel_time")
+        times = times_from(snap_to_node(amb.location.lat, amb.location.lon))
         matrix.append([times.get(n) for n in goal_nodes])
     return matrix
 
