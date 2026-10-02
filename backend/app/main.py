@@ -8,6 +8,8 @@ from app.core.config import AMBULANCE_SEED, LAT_MAX, LAT_MIN, LON_MAX, LON_MIN
 from app.core.enums import AccidentStatus
 from app.core.schemas import Accident, AccidentReport, Ambulance
 from app.core.seeds import load_ambulances
+from fastapi.responses import FileResponse
+from app.core.config import ROOT
 
 
 @asynccontextmanager
@@ -18,7 +20,14 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="AI Emergency Response Network", lifespan=lifespan)
+@app.get("/accidents", response_model=list[Accident])
+def get_accidents():
+    return db.list_accidents()
 
+
+@app.get("/map", include_in_schema=False)
+def map_page():
+    return FileResponse(ROOT / "dashboard" / "index.html")
 
 class StatusChange(BaseModel):
     new_status: AccidentStatus
