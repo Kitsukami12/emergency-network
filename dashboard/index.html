@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Emergency Network</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    body { margin: 0; font-family: sans-serif; }
+    #bar { padding: 10px 16px; background: #14232b; color: white; }
+    #map { height: calc(100vh - 44px); }
+  </style>
+</head>
+<body>
+  <div id="bar">Emergency Network | <span id="stats">loading...</span>
+    | click the map to report an accident</div>
+  <div id="map"></div>
+<script>
+const map = L.map('map').setView([22.7196, 75.8577], 12);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  { attribution: '&copy; OpenStreetMap' }).addTo(map);
+
+const layer = L.layerGroup().addTo(map);
+const sevColor = { LOW: 'orange', MEDIUM: 'darkorange', HIGH: 'red', CRITICAL: 'darkred' };
+
+async function refresh() {
+  const [ambs, accs] = await Promise.all([
+    fetch('/ambulances').then(r => r.json()),
+    fetch('/accidents').then(r => r.json()),
+  ]);
+  layer.clearLayers();
+  ambs.forEach(a => L.circleMarker([a.location.lat, a.location.lon],
+      { radius: 8, color: 'blue', fillOpacity: 0.8 })
+    .bindPopup(`<b>${a.ambulance_id}</b><br>${a.base_name}<br>${a.status}`)
+    .addTo(layer));
+  accs.forEach(a => L.circleMarker([a.location.lat, a.location.lon],
+      { radius: 10, color: sevColor[a.severity], fillOpacity: 0.9 })
+    .bindPopup(`<b>${a.accident_id}</b><br>${a.severity}<br>${a.status}`)
+    .addTo(layer));
+  document.getElementById('stats').textContent =
+    `${ambs.length} ambulances, ${accs.length} accidents`;
+}
+
+map.on('click', async e => {
+  const res = await fetch('/accidents', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      location: { lat: e.latlng.lat, lon: e.latlng.lng }, severity: 'HIGH' }),
+  });
+  if (!res.ok) alert((await res.json()).detail);
+  refresh();
+});
+
+refresh();
+setInterval(refresh, 3000);
+</script>
+</body>
+</html>

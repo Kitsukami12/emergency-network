@@ -125,3 +125,10 @@ def change_status(accident_id: str, new_status: AccidentStatus) -> Accident:
             (new_status.value, accident_id),
         )
     return get_accident(accident_id)
+
+def list_accidents() -> list[Accident]:
+    with connect() as conn:
+        rows = conn.execute(
+            "SELECT accident_id FROM accidents ORDER BY reported_at DESC"
+        ).fetchall()
+    return [get_accident(r["accident_id"]) for r in rows]
