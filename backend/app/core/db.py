@@ -4,6 +4,9 @@ from contextlib import contextmanager
 
 from app.core.config import DB_FILE
 from app.core.schemas import Accident, AccidentReport, Ambulance, Location
+from app.core.enums import AccidentStatus
+from app.core.transitions import can_transition
+
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS ambulances (
@@ -102,3 +105,23 @@ def get_accident(accident_id: str) -> Accident | None:
         assigned_ambulance_id=r["assigned_ambulance_id"],
         reported_at=r["reported_at"],
     )
+
+
+class IllegalTransition(Exception):
+    pass
+
+
+def change_status(accident_id: str, new_status: AccidentStatus) -> Accident:
+    accident = get_accident(accident_id)
+    if accident is None:
+        raise LookupError(f"Accident {accident_id} not found")
+    if not can_transition(accident.status, new_status):
+        raise IllegalTransition(
+            f"{accident.status.value} -> {new_status.value} is not allowed"
+        )
+    with connect() as conn:
+        conn.execute(
+            "UPDATE accidents SET status = ? WHERE accident_id = ?",
+            (new_status.value, accident_id),
+        )
+    return get_accident(accident_id)
