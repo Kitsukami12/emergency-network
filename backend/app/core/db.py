@@ -6,6 +6,7 @@ from app.core.config import DB_FILE
 from app.core.schemas import Accident, AccidentReport, Ambulance, Location
 from app.core.enums import AccidentStatus
 from app.core.transitions import can_transition
+from app.core.enums import AccidentStatus, AmbulanceStatus
 
 
 SCHEMA = """
@@ -132,3 +133,27 @@ def list_accidents() -> list[Accident]:
             "SELECT accident_id FROM accidents ORDER BY reported_at DESC"
         ).fetchall()
     return [get_accident(r["accident_id"]) for r in rows]
+
+def list_accidents_by_status(status: AccidentStatus) -> list[Accident]:
+    with connect() as conn:
+        rows = conn.execute(
+            "SELECT accident_id FROM accidents WHERE status = ? ORDER BY reported_at",
+            (status.value,),
+        ).fetchall()
+    return [get_accident(r["accident_id"]) for r in rows]
+
+
+def assign_ambulance(accident_id: str, ambulance_id: str) -> None:
+    with connect() as conn:
+        conn.execute(
+            "UPDATE accidents SET assigned_ambulance_id = ? WHERE accident_id = ?",
+            (ambulance_id, accident_id),
+        )
+
+
+def set_ambulance_status(ambulance_id: str, status: AmbulanceStatus) -> None:
+    with connect() as conn:
+        conn.execute(
+            "UPDATE ambulances SET status = ? WHERE ambulance_id = ?",
+            (status.value, ambulance_id),
+        )
