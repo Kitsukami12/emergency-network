@@ -1,0 +1,1919 @@
+[
+  {
+    "hospital_id": "H001",
+    "name": "Greater Kailash Hospital",
+    "lat": 22.725082,
+    "lon": 75.890465,
+    "osm_id": "node/1802056893",
+    "has_emergency": true,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H002",
+    "name": "Indore Institute Of Medical Scinces",
+    "lat": 22.761195,
+    "lon": 75.896181,
+    "osm_id": "node/6194026995",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H003",
+    "name": "Bhandari Hospital and Research Center",
+    "lat": 22.7528,
+    "lon": 75.88898,
+    "osm_id": "node/6194292537",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H004",
+    "name": "Medanta",
+    "lat": 22.748748,
+    "lon": 75.895942,
+    "osm_id": "node/6202661032",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H005",
+    "name": "City Hospital and Research Centre",
+    "lat": 22.733899,
+    "lon": 75.873866,
+    "osm_id": "node/6202757553",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H006",
+    "name": "Shalby Hospitals",
+    "lat": 22.729057,
+    "lon": 75.879285,
+    "osm_id": "node/6202901308",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H007",
+    "name": "B M Mittal Hospital and Research Centre",
+    "lat": 22.718448,
+    "lon": 75.887493,
+    "osm_id": "node/6207062085",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H008",
+    "name": "Eurekaa Hospital",
+    "lat": 22.723346,
+    "lon": 75.889089,
+    "osm_id": "node/6207190444",
+    "has_emergency": true,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H009",
+    "name": "Shakuntala Devi Hospital And Research Centre",
+    "lat": 22.717567,
+    "lon": 75.905712,
+    "osm_id": "node/6207292596",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H010",
+    "name": "District Hospital,Indore",
+    "lat": 22.708825,
+    "lon": 75.830806,
+    "osm_id": "node/6214033167",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H011",
+    "name": "Bafna Hospital and Orthopaedic Research Centre",
+    "lat": 22.715736,
+    "lon": 75.84197,
+    "osm_id": "node/6216185615",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H012",
+    "name": "Al Shifa National Hospital and Research Centre",
+    "lat": 22.730917,
+    "lon": 75.850564,
+    "osm_id": "node/6216308860",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H013",
+    "name": "Kailash Hospital",
+    "lat": 22.708828,
+    "lon": 75.846443,
+    "osm_id": "node/6216452870",
+    "has_emergency": true,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H014",
+    "name": "Aryan Hospital and Research Centre",
+    "lat": 22.68615,
+    "lon": 75.829284,
+    "osm_id": "node/6219468397",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H015",
+    "name": "St.Francis Hospital And Research Centre",
+    "lat": 22.672328,
+    "lon": 75.915039,
+    "osm_id": "node/6227625033",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H016",
+    "name": "Mohak Hitech Speciality Hospital",
+    "lat": 22.798738,
+    "lon": 75.845383,
+    "osm_id": "node/6233552577",
+    "has_emergency": true,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H017",
+    "name": "Pushpkunj Hospital",
+    "lat": 22.652507,
+    "lon": 75.884746,
+    "osm_id": "node/6238493674",
+    "has_emergency": true,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H018",
+    "name": "Pushpshri Hospital And Research Center",
+    "lat": 22.696226,
+    "lon": 75.880098,
+    "osm_id": "node/6341168746",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H019",
+    "name": "Mediplus Hospital and Research Centre",
+    "lat": 22.759468,
+    "lon": 75.878899,
+    "osm_id": "node/6341186789",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H020",
+    "name": "Lady Halima Hospital And Research Center",
+    "lat": 22.731565,
+    "lon": 75.91203,
+    "osm_id": "node/6341385262",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H021",
+    "name": "Govindram Saxeriya Charitable Trust Hospital",
+    "lat": 22.730796,
+    "lon": 75.874938,
+    "osm_id": "node/6341578932",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H022",
+    "name": "Devi Ahilya Hospital and Research Centre",
+    "lat": 22.716122,
+    "lon": 75.871797,
+    "osm_id": "node/7016006723",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H023",
+    "name": "Ent Hospital and Research Centre",
+    "lat": 22.720575,
+    "lon": 75.881918,
+    "osm_id": "node/7016090362",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H024",
+    "name": "Shri Aurobindo Institute Of Medical Sciences",
+    "lat": 22.797218,
+    "lon": 75.845192,
+    "osm_id": "node/7016647053",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H025",
+    "name": "Shri Malwa Hospital and Research Center",
+    "lat": 22.727838,
+    "lon": 75.825323,
+    "osm_id": "node/7016826962",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H026",
+    "name": "Bombay Hospital,Indore",
+    "lat": 22.658853,
+    "lon": 75.804277,
+    "osm_id": "node/7288123523",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H027",
+    "name": "Nakshatra Heart and Multispeciality Hospital",
+    "lat": 22.707529,
+    "lon": 75.906239,
+    "osm_id": "node/7288224325",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H028",
+    "name": "Shri Sai Baba Hospital & Research Centre",
+    "lat": 22.710007,
+    "lon": 75.84975,
+    "osm_id": "node/7288224346",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H029",
+    "name": "Choithram hospital and research center indore",
+    "lat": 22.703622,
+    "lon": 75.855708,
+    "osm_id": "node/7288224350",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H030",
+    "name": "Coral Hospital and Research Centre",
+    "lat": 22.726928,
+    "lon": 75.884611,
+    "osm_id": "node/7288224362",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H031",
+    "name": "Vishesh Jupiter Hospital",
+    "lat": 22.684547,
+    "lon": 75.881638,
+    "osm_id": "node/9504327575",
+    "has_emergency": true,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H032",
+    "name": "Super Speciality Hospital",
+    "lat": 22.696983,
+    "lon": 75.882093,
+    "osm_id": "node/11690381783",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H033",
+    "name": "bombay hospital",
+    "lat": 22.754573,
+    "lon": 75.903697,
+    "osm_id": "node/11693035975",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H034",
+    "name": "NAMAH HOSPITAL AND LAPAROSCOPIC CENTRE",
+    "lat": 22.753011,
+    "lon": 75.892115,
+    "osm_id": "node/12378897647",
+    "has_emergency": true,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H035",
+    "name": "CHL CBCC Cancer Centre",
+    "lat": 22.732384,
+    "lon": 75.889194,
+    "osm_id": "way/191774908",
+    "has_emergency": true,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H036",
+    "name": "Life Line Hospital",
+    "lat": 22.733235,
+    "lon": 75.890461,
+    "osm_id": "way/191774922",
+    "has_emergency": true,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H037",
+    "name": "Choithram Hospital and Research Centre",
+    "lat": 22.689291,
+    "lon": 75.852941,
+    "osm_id": "way/191997085",
+    "has_emergency": true,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H038",
+    "name": "Synergy Hospital And Research Centre",
+    "lat": 22.758485,
+    "lon": 75.889084,
+    "osm_id": "way/439503892",
+    "has_emergency": false,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H039",
+    "name": "Apollo Hospital",
+    "lat": 22.757616,
+    "lon": 75.885175,
+    "osm_id": "way/677243271",
+    "has_emergency": true,
+    "is_major": true
+  },
+  {
+    "hospital_id": "H040",
+    "name": "Shubham Hospital",
+    "lat": 22.691041,
+    "lon": 75.826379,
+    "osm_id": "node/4634651012",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H041",
+    "name": "Curewell hospital janjeerwala square",
+    "lat": 22.726664,
+    "lon": 75.881964,
+    "osm_id": "node/5718306821",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H042",
+    "name": "Yoga Amrutam",
+    "lat": 22.757924,
+    "lon": 75.902096,
+    "osm_id": "node/6187427616",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H043",
+    "name": "Ashadeep Hospital",
+    "lat": 22.763765,
+    "lon": 75.891444,
+    "osm_id": "node/6187463592",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H044",
+    "name": "Rhythmic Power Yoga",
+    "lat": 22.755851,
+    "lon": 75.88723,
+    "osm_id": "node/6187557090",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H045",
+    "name": "Kanak Hospital",
+    "lat": 22.765047,
+    "lon": 75.887123,
+    "osm_id": "node/6187557408",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H046",
+    "name": "Mother Care Nursing Home",
+    "lat": 22.758512,
+    "lon": 75.885923,
+    "osm_id": "node/6188049620",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H047",
+    "name": "Aura Health Care",
+    "lat": 22.758648,
+    "lon": 75.907539,
+    "osm_id": "node/6194434080",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H048",
+    "name": "E.S.I.C. Hospital",
+    "lat": 22.748406,
+    "lon": 75.878411,
+    "osm_id": "node/6201433589",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H049",
+    "name": "Al Jufin Unani",
+    "lat": 22.730469,
+    "lon": 75.894641,
+    "osm_id": "node/6201560997",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H050",
+    "name": "YOGA",
+    "lat": 22.733771,
+    "lon": 75.892464,
+    "osm_id": "node/6201561000",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H051",
+    "name": "Samarpit Hospital",
+    "lat": 22.728071,
+    "lon": 75.894145,
+    "osm_id": "node/6201561010",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H052",
+    "name": "Narmade Ayruvedam Panchkaram Kendra",
+    "lat": 22.729452,
+    "lon": 75.896655,
+    "osm_id": "node/6201561023",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H053",
+    "name": "Active Life",
+    "lat": 22.731583,
+    "lon": 75.90128,
+    "osm_id": "node/6201561035",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H054",
+    "name": "Guru Tech Bahaddur Hospital",
+    "lat": 22.740477,
+    "lon": 75.881341,
+    "osm_id": "node/6201620092",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H055",
+    "name": "Rinku Sharma Thalassemia Charitable Hospital",
+    "lat": 22.744776,
+    "lon": 75.87644,
+    "osm_id": "node/6201770918",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H056",
+    "name": "Vidhya Nursing Home",
+    "lat": 22.742781,
+    "lon": 75.893887,
+    "osm_id": "node/6201801152",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H057",
+    "name": "Universal Hospital and Care Centre",
+    "lat": 22.76115,
+    "lon": 75.905481,
+    "osm_id": "node/6201821832",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H058",
+    "name": "Homoeopathic and Biochemical Dawaiya",
+    "lat": 22.737458,
+    "lon": 75.885297,
+    "osm_id": "node/6201927779",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H059",
+    "name": "Yoganandam",
+    "lat": 22.734207,
+    "lon": 75.889523,
+    "osm_id": "node/6202106844",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H060",
+    "name": "Shree Ji hospital",
+    "lat": 22.731972,
+    "lon": 75.873988,
+    "osm_id": "node/6202175993",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H061",
+    "name": "Samar Maternity Home",
+    "lat": 22.735452,
+    "lon": 75.90237,
+    "osm_id": "node/6202178149",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H062",
+    "name": "Dayavati Hospital",
+    "lat": 22.737098,
+    "lon": 75.900873,
+    "osm_id": "node/6202194568",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H063",
+    "name": "Mangilal Churiya Hospital",
+    "lat": 22.732558,
+    "lon": 75.88447,
+    "osm_id": "node/6202526053",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H064",
+    "name": "Patanjali Home Care",
+    "lat": 22.747916,
+    "lon": 75.899411,
+    "osm_id": "node/6202661069",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H065",
+    "name": "Bhandari Hospital",
+    "lat": 22.747974,
+    "lon": 75.872042,
+    "osm_id": "node/6202705467",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H066",
+    "name": "Verma Nursing Home",
+    "lat": 22.745066,
+    "lon": 75.871543,
+    "osm_id": "node/6202705480",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H067",
+    "name": "Dayanand Hospital",
+    "lat": 22.741798,
+    "lon": 75.871171,
+    "osm_id": "node/6202705787",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H068",
+    "name": "Laxmi Memorial Hospital",
+    "lat": 22.731017,
+    "lon": 75.883051,
+    "osm_id": "node/6202835031",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H069",
+    "name": "The Recovery Hospital",
+    "lat": 22.729843,
+    "lon": 75.882064,
+    "osm_id": "node/6202835032",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H070",
+    "name": "Charak Hospital Pvt Ltd",
+    "lat": 22.729232,
+    "lon": 75.872883,
+    "osm_id": "node/6202846783",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H071",
+    "name": "Sohanlal Holistic Centre",
+    "lat": 22.732114,
+    "lon": 75.877665,
+    "osm_id": "node/6202901303",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H072",
+    "name": "Child Care Hospital",
+    "lat": 22.716847,
+    "lon": 75.893912,
+    "osm_id": "node/6207002066",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H073",
+    "name": "Crystal Lithotripsy and Urology Centre",
+    "lat": 22.725628,
+    "lon": 75.888515,
+    "osm_id": "node/6207027785",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H074",
+    "name": "Shri Vaishnav Hospital",
+    "lat": 22.718749,
+    "lon": 75.897438,
+    "osm_id": "node/6207044572",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H075",
+    "name": "Medicare Hospital",
+    "lat": 22.722383,
+    "lon": 75.890821,
+    "osm_id": "node/6207048393",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H076",
+    "name": "Vishesh Hospital",
+    "lat": 22.716756,
+    "lon": 75.884418,
+    "osm_id": "node/6207061981",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H077",
+    "name": "Suyash Hospital",
+    "lat": 22.713798,
+    "lon": 75.883927,
+    "osm_id": "node/6207080363",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H078",
+    "name": "Government Autonomous College Of Dentistry And Hospital",
+    "lat": 22.711651,
+    "lon": 75.881461,
+    "osm_id": "node/6207122196",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H079",
+    "name": "Dolphin Hospital",
+    "lat": 22.723923,
+    "lon": 75.88362,
+    "osm_id": "node/6207122708",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H080",
+    "name": "\u0936\u094d\u0930\u0940 \u0905\u0928\u0902\u0928\u094d\u0924\u0928\u093e\u0925 \u091a\u093f\u0915\u093f\u0924\u094d\u0938\u093e\u0932\u092f",
+    "lat": 22.707626,
+    "lon": 75.877158,
+    "osm_id": "node/6207141572",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H081",
+    "name": "Christan Hospital",
+    "lat": 22.711507,
+    "lon": 75.871713,
+    "osm_id": "node/6207141583",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H082",
+    "name": "Gokuldas Hospital",
+    "lat": 22.716385,
+    "lon": 75.876078,
+    "osm_id": "node/6207166584",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H083",
+    "name": "M Y Hospital Respiratory and Bone Section",
+    "lat": 22.71346,
+    "lon": 75.881093,
+    "osm_id": "node/6207167685",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H084",
+    "name": "M Y HOSPITAL",
+    "lat": 22.713534,
+    "lon": 75.879557,
+    "osm_id": "node/6207167686",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H085",
+    "name": "Bhagwati Maternity And Nursing Home",
+    "lat": 22.71951,
+    "lon": 75.896241,
+    "osm_id": "node/6207177544",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H086",
+    "name": "P. C. Sethi hospital",
+    "lat": 22.708611,
+    "lon": 75.878642,
+    "osm_id": "node/6207195407",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H087",
+    "name": "Noble Hospital",
+    "lat": 22.719142,
+    "lon": 75.877805,
+    "osm_id": "node/6207573921",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H088",
+    "name": "Eureka Hospital",
+    "lat": 22.72287,
+    "lon": 75.896292,
+    "osm_id": "node/6207763631",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H089",
+    "name": "Disha Fertility and Surgical Centre",
+    "lat": 22.72543,
+    "lon": 75.895367,
+    "osm_id": "node/6207763645",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H090",
+    "name": "\u0906\u0928\u0902\u0926 \u0939\u0949\u0938\u094d\u092a\u093f\u091f\u0932 \u090f\u0902\u0921 \u0930\u093f\u0938\u0930\u094d\u091a \u0938\u0947\u0902\u091f\u0930",
+    "lat": 22.70315,
+    "lon": 75.861559,
+    "osm_id": "node/6213624625",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H091",
+    "name": "Chirayu Hospital",
+    "lat": 22.719928,
+    "lon": 75.840447,
+    "osm_id": "node/6213650893",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H092",
+    "name": "Bansal Hospital",
+    "lat": 22.713268,
+    "lon": 75.843847,
+    "osm_id": "node/6213909993",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H093",
+    "name": "Tanish Hospital",
+    "lat": 22.716265,
+    "lon": 75.854975,
+    "osm_id": "node/6213964372",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H094",
+    "name": "Ramkrishna Hospital",
+    "lat": 22.709993,
+    "lon": 75.831599,
+    "osm_id": "node/6214058603",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H095",
+    "name": "Saurabh Hospital",
+    "lat": 22.71899,
+    "lon": 75.853152,
+    "osm_id": "node/6214095680",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H096",
+    "name": "Homoeopathic Hospital",
+    "lat": 22.72208,
+    "lon": 75.837153,
+    "osm_id": "node/6214185877",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H097",
+    "name": "MTH Women's Hospital",
+    "lat": 22.718102,
+    "lon": 75.865359,
+    "osm_id": "node/6215256100",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H098",
+    "name": "Pulse Hospital",
+    "lat": 22.698822,
+    "lon": 75.85463,
+    "osm_id": "node/6215679231",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H099",
+    "name": "Medisquare Hospital",
+    "lat": 22.690504,
+    "lon": 75.864589,
+    "osm_id": "node/6215679249",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H100",
+    "name": "Gurjar Hospital",
+    "lat": 22.691856,
+    "lon": 75.866137,
+    "osm_id": "node/6215679253",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H101",
+    "name": "Apple Hospital",
+    "lat": 22.694002,
+    "lon": 75.866639,
+    "osm_id": "node/6215679256",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H102",
+    "name": "Shree Astha Hospital",
+    "lat": 22.703712,
+    "lon": 75.825617,
+    "osm_id": "node/6215924668",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H103",
+    "name": "Banthia Hospital",
+    "lat": 22.723258,
+    "lon": 75.829552,
+    "osm_id": "node/6215942945",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H104",
+    "name": "Unique Hospital",
+    "lat": 22.695245,
+    "lon": 75.838647,
+    "osm_id": "node/6216066255",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H105",
+    "name": "Yash Lok Hospital",
+    "lat": 22.689307,
+    "lon": 75.828464,
+    "osm_id": "node/6216066272",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H106",
+    "name": "Arihant Hospital",
+    "lat": 22.701483,
+    "lon": 75.82939,
+    "osm_id": "node/6216066273",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H107",
+    "name": "Sundaram Hospital",
+    "lat": 22.696257,
+    "lon": 75.838026,
+    "osm_id": "node/6216112189",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H108",
+    "name": "Sushrut Hospital",
+    "lat": 22.715639,
+    "lon": 75.845342,
+    "osm_id": "node/6216185616",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H109",
+    "name": "Maa Holistic Cure",
+    "lat": 22.699468,
+    "lon": 75.868387,
+    "osm_id": "node/6216186785",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H110",
+    "name": "Pranic Healing Center",
+    "lat": 22.697038,
+    "lon": 75.865995,
+    "osm_id": "node/6216189282",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H111",
+    "name": "Roberts Nursing Home",
+    "lat": 22.710709,
+    "lon": 75.888373,
+    "osm_id": "node/6216189591",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H112",
+    "name": "Varma Union Hospital",
+    "lat": 22.711911,
+    "lon": 75.838147,
+    "osm_id": "node/6216223084",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H113",
+    "name": "Shree Indore Cloth market Hospital",
+    "lat": 22.711776,
+    "lon": 75.84001,
+    "osm_id": "node/6216223286",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H114",
+    "name": "Shreepad Hospital and Surgical Centre",
+    "lat": 22.706561,
+    "lon": 75.84189,
+    "osm_id": "node/6216235724",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H115",
+    "name": "Raja Hospital",
+    "lat": 22.708759,
+    "lon": 75.828205,
+    "osm_id": "node/6216327475",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H116",
+    "name": "Sevalay Hospital",
+    "lat": 22.713636,
+    "lon": 75.849211,
+    "osm_id": "node/6216332790",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H117",
+    "name": "Premkumari Devi Hospital",
+    "lat": 22.712531,
+    "lon": 75.846596,
+    "osm_id": "node/6216344981",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H118",
+    "name": "Patanjali Hospital",
+    "lat": 22.700962,
+    "lon": 75.8416,
+    "osm_id": "node/6216403585",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H119",
+    "name": "Government Ashtang Ayruvedic College & Hospital",
+    "lat": 22.694409,
+    "lon": 75.848826,
+    "osm_id": "node/6216403594",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H120",
+    "name": "Mata Gujri Charitable Hospital",
+    "lat": 22.692937,
+    "lon": 75.831639,
+    "osm_id": "node/6216486059",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H121",
+    "name": "Kripalaya",
+    "lat": 22.69584,
+    "lon": 75.827259,
+    "osm_id": "node/6216509195",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H122",
+    "name": "Khandelwal Hospitals and Nursing Home",
+    "lat": 22.691651,
+    "lon": 75.837233,
+    "osm_id": "node/6216509202",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H123",
+    "name": "Sehat Hospital",
+    "lat": 22.702108,
+    "lon": 75.839369,
+    "osm_id": "node/6216547608",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H124",
+    "name": "Indore Hospital",
+    "lat": 22.719171,
+    "lon": 75.854813,
+    "osm_id": "node/6216931123",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H125",
+    "name": "Al-noor Charitable Hospital",
+    "lat": 22.715436,
+    "lon": 75.849025,
+    "osm_id": "node/6216941742",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H126",
+    "name": "Railway Hospital",
+    "lat": 22.716859,
+    "lon": 75.869911,
+    "osm_id": "node/6216982258",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H127",
+    "name": "Rajyog Meditation Kendra",
+    "lat": 22.680074,
+    "lon": 75.851219,
+    "osm_id": "node/6219018040",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H128",
+    "name": "Pooja Hospital",
+    "lat": 22.688686,
+    "lon": 75.836804,
+    "osm_id": "node/6219206958",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H129",
+    "name": "Patanjali Yoga",
+    "lat": 22.686544,
+    "lon": 75.835538,
+    "osm_id": "node/6219206960",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H130",
+    "name": "Matram Hospital",
+    "lat": 22.702524,
+    "lon": 75.868771,
+    "osm_id": "node/6219240943",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H131",
+    "name": "Purvi Hospital",
+    "lat": 22.684126,
+    "lon": 75.829681,
+    "osm_id": "node/6221166241",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H132",
+    "name": "Dukh Bhanjan Hospital",
+    "lat": 22.685426,
+    "lon": 75.824194,
+    "osm_id": "node/6222935428",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H133",
+    "name": "Aastha Hospital",
+    "lat": 22.769549,
+    "lon": 75.888759,
+    "osm_id": "node/6225570788",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H134",
+    "name": "New Life Hospital",
+    "lat": 22.691917,
+    "lon": 75.907967,
+    "osm_id": "node/6227611846",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H135",
+    "name": "Sai Care Hospital",
+    "lat": 22.692577,
+    "lon": 75.905693,
+    "osm_id": "node/6227622140",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H136",
+    "name": "Gaurav Hospital",
+    "lat": 22.67268,
+    "lon": 75.880252,
+    "osm_id": "node/6227672739",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H137",
+    "name": "Sai Janki Hospital",
+    "lat": 22.770661,
+    "lon": 75.904863,
+    "osm_id": "node/6229504609",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H138",
+    "name": "Sunrise Hospital",
+    "lat": 22.79302,
+    "lon": 75.907044,
+    "osm_id": "node/6233411735",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H139",
+    "name": "\u0938\u0928\u092e\u0924\u0940 \u0905\u0938\u094d\u092a\u0924\u093e\u0932",
+    "lat": 22.738249,
+    "lon": 75.834417,
+    "osm_id": "node/6233486481",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H140",
+    "name": "New Life Hospital",
+    "lat": 22.759421,
+    "lon": 75.848183,
+    "osm_id": "node/6233505294",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H141",
+    "name": "Shree Maruti Nandan Hospital",
+    "lat": 22.740708,
+    "lon": 75.791826,
+    "osm_id": "node/6233517028",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H142",
+    "name": "S.K. Hospital",
+    "lat": 22.729319,
+    "lon": 75.818689,
+    "osm_id": "node/6233728658",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H143",
+    "name": "Bhaiji Hospital",
+    "lat": 22.723959,
+    "lon": 75.82435,
+    "osm_id": "node/6233728660",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H144",
+    "name": "Shrinath Hospital",
+    "lat": 22.725737,
+    "lon": 75.82165,
+    "osm_id": "node/6233728661",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H145",
+    "name": "Citizen Hospital",
+    "lat": 22.726231,
+    "lon": 75.81885,
+    "osm_id": "node/6233728663",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H146",
+    "name": "Sanyog Hospital",
+    "lat": 22.726756,
+    "lon": 75.816645,
+    "osm_id": "node/6233728664",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H147",
+    "name": "Ramkrishna Hospital",
+    "lat": 22.730106,
+    "lon": 75.810261,
+    "osm_id": "node/6233728665",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H148",
+    "name": "Arya aushadhyala",
+    "lat": 22.738672,
+    "lon": 75.791639,
+    "osm_id": "node/6233728670",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H149",
+    "name": "Divine Nursing Home",
+    "lat": 22.740159,
+    "lon": 75.788771,
+    "osm_id": "node/6233728671",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H150",
+    "name": "Yash Hospital",
+    "lat": 22.687186,
+    "lon": 75.887389,
+    "osm_id": "node/6234108920",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H151",
+    "name": "Shraddha Hospital",
+    "lat": 22.739595,
+    "lon": 75.848397,
+    "osm_id": "node/6235180479",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H152",
+    "name": "Shivam Yoga Therapy Centre",
+    "lat": 22.661844,
+    "lon": 75.890041,
+    "osm_id": "node/6238493672",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H153",
+    "name": "Government Urban Primary Health Center",
+    "lat": 22.729712,
+    "lon": 75.811715,
+    "osm_id": "node/6308743062",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H154",
+    "name": "Satguru Nursing Home",
+    "lat": 22.747177,
+    "lon": 75.859379,
+    "osm_id": "node/6341128814",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H155",
+    "name": "Aman Hospital",
+    "lat": 22.724376,
+    "lon": 75.864299,
+    "osm_id": "node/6341135653",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H156",
+    "name": "Harlalka Nursing Home",
+    "lat": 22.719868,
+    "lon": 75.848084,
+    "osm_id": "node/6341141125",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H157",
+    "name": "Minesh Hopital",
+    "lat": 22.694495,
+    "lon": 75.880923,
+    "osm_id": "node/6341173379",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H158",
+    "name": "Medipearl Hospital",
+    "lat": 22.690126,
+    "lon": 75.881409,
+    "osm_id": "node/6341177979",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H159",
+    "name": "Dashmesh Hospital",
+    "lat": 22.684368,
+    "lon": 75.864102,
+    "osm_id": "node/6341181091",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H160",
+    "name": "Akash Hospital",
+    "lat": 22.702699,
+    "lon": 75.921255,
+    "osm_id": "node/6341182797",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H161",
+    "name": "Aishwarya Hospital",
+    "lat": 22.701243,
+    "lon": 75.916167,
+    "osm_id": "node/6341182798",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H162",
+    "name": "M J Memorial Hospital",
+    "lat": 22.697504,
+    "lon": 75.85456,
+    "osm_id": "node/6341186785",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H163",
+    "name": "Nahar Nursing Home",
+    "lat": 22.720414,
+    "lon": 75.902623,
+    "osm_id": "node/6341186786",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H164",
+    "name": "Mayur Hospital, Indore",
+    "lat": 22.724809,
+    "lon": 75.906103,
+    "osm_id": "node/6341186787",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H165",
+    "name": "Pranshu Hospital",
+    "lat": 22.69802,
+    "lon": 75.905938,
+    "osm_id": "node/6341213502",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H166",
+    "name": "Apoorva Nursing Home",
+    "lat": 22.701305,
+    "lon": 75.872238,
+    "osm_id": "node/6341213504",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H167",
+    "name": "Aarogya Hospital",
+    "lat": 22.713448,
+    "lon": 75.854486,
+    "osm_id": "node/6341224185",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H168",
+    "name": "M J Memorial Hospital",
+    "lat": 22.68603,
+    "lon": 75.862982,
+    "osm_id": "node/6341229519",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H169",
+    "name": "Akole Nursing Home",
+    "lat": 22.746032,
+    "lon": 75.868827,
+    "osm_id": "node/6341385258",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H170",
+    "name": "Swasthiya Kendra Evam Prastuti Grah",
+    "lat": 22.744294,
+    "lon": 75.877861,
+    "osm_id": "node/6341385259",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H171",
+    "name": "Saroj Nursing Home",
+    "lat": 22.741909,
+    "lon": 75.87898,
+    "osm_id": "node/6341385260",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H172",
+    "name": "Shaskiya Kalyanmal Nursing Home",
+    "lat": 22.726548,
+    "lon": 75.889768,
+    "osm_id": "node/6341405879",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H173",
+    "name": "Jain Nursing Home",
+    "lat": 22.719197,
+    "lon": 75.870847,
+    "osm_id": "node/6341435447",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H174",
+    "name": "Bhoraskar Hospital",
+    "lat": 22.718425,
+    "lon": 75.875773,
+    "osm_id": "node/6341578930",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H175",
+    "name": "Sunshine Hospital",
+    "lat": 22.733157,
+    "lon": 75.906396,
+    "osm_id": "node/6341578935",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H176",
+    "name": "Indore Maternity and ENT Centre",
+    "lat": 22.732782,
+    "lon": 75.9143,
+    "osm_id": "node/6341578937",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H177",
+    "name": "Eazy Care Hospital",
+    "lat": 22.717246,
+    "lon": 75.840407,
+    "osm_id": "node/6341580975",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H178",
+    "name": "Nirmal Care Hospital",
+    "lat": 22.724665,
+    "lon": 75.825416,
+    "osm_id": "node/6341580978",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H179",
+    "name": "Prime Care Hospital",
+    "lat": 22.761931,
+    "lon": 75.874726,
+    "osm_id": "node/6341853313",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H180",
+    "name": "Birla Hospital",
+    "lat": 22.755458,
+    "lon": 75.862641,
+    "osm_id": "node/6341860695",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H181",
+    "name": "Kibs Hospital",
+    "lat": 22.756938,
+    "lon": 75.911993,
+    "osm_id": "node/6341865025",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H182",
+    "name": "\u0905\u0930\u094d\u092a\u0923 \u0928\u0930\u094d\u0938\u093f\u0902\u0917 \u0939\u094b\u092e",
+    "lat": 22.720249,
+    "lon": 75.855451,
+    "osm_id": "node/6341878320",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H183",
+    "name": "Asian Institue Of Infertilty Management",
+    "lat": 22.735349,
+    "lon": 75.888065,
+    "osm_id": "node/7013582190",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H184",
+    "name": "Triveni Hospital, Indore",
+    "lat": 22.736342,
+    "lon": 75.885791,
+    "osm_id": "node/7013804532",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H185",
+    "name": "R L B Hospital and Reserch Center",
+    "lat": 22.698107,
+    "lon": 75.828007,
+    "osm_id": "node/7013853002",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H186",
+    "name": "Vatsalya Nursing Home, Indore",
+    "lat": 22.749222,
+    "lon": 75.873288,
+    "osm_id": "node/7013876256",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H187",
+    "name": "Vyas Children Hospital",
+    "lat": 22.716038,
+    "lon": 75.852334,
+    "osm_id": "node/7014275793",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H188",
+    "name": "Unique Hospital, Jawahar Marg",
+    "lat": 22.715779,
+    "lon": 75.850187,
+    "osm_id": "node/7015332162",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H189",
+    "name": "Noble Hospital, Indore",
+    "lat": 22.690013,
+    "lon": 75.930487,
+    "osm_id": "node/7016082937",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H190",
+    "name": "Geetanjali Hospital",
+    "lat": 22.7218,
+    "lon": 75.83483,
+    "osm_id": "node/7016451756",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H191",
+    "name": "Singhal Urology And Gynocology Center,Indore",
+    "lat": 22.716051,
+    "lon": 75.843148,
+    "osm_id": "node/7016451757",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H192",
+    "name": "Eureka Hospital Pvt. Ltd.",
+    "lat": 22.722992,
+    "lon": 75.898453,
+    "osm_id": "node/7016693382",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H193",
+    "name": "Batra Hospital",
+    "lat": 22.721896,
+    "lon": 75.880888,
+    "osm_id": "node/7016701808",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H194",
+    "name": "S. K. Hospital, Indore",
+    "lat": 22.716868,
+    "lon": 75.838436,
+    "osm_id": "node/7016826929",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H195",
+    "name": "Suyog Hospital",
+    "lat": 22.70439,
+    "lon": 75.860781,
+    "osm_id": "node/7017489042",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H196",
+    "name": "M.G. Smriti Chikitsalaya Mahavidhyalaya",
+    "lat": 22.714049,
+    "lon": 75.882273,
+    "osm_id": "node/7017779069",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H197",
+    "name": "Hukumchand Hospital (Lal Hospital)",
+    "lat": 22.717658,
+    "lon": 75.866744,
+    "osm_id": "node/7288224323",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H198",
+    "name": "R K Hospital",
+    "lat": 22.697852,
+    "lon": 75.878746,
+    "osm_id": "node/7288224328",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H199",
+    "name": "Barod Hospital",
+    "lat": 22.756213,
+    "lon": 75.878223,
+    "osm_id": "node/7288224330",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H200",
+    "name": "Motherhood Hospitals",
+    "lat": 22.743113,
+    "lon": 75.890916,
+    "osm_id": "node/7288224356",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H201",
+    "name": "True Care Hospital",
+    "lat": 22.747934,
+    "lon": 75.846147,
+    "osm_id": "node/7288224372",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H202",
+    "name": "Chota Hospital Pvt. Ltd.",
+    "lat": 22.745733,
+    "lon": 75.893083,
+    "osm_id": "node/7288224375",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H203",
+    "name": "H.J.Memorial Hospital",
+    "lat": 22.708065,
+    "lon": 75.855639,
+    "osm_id": "node/7288224382",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H204",
+    "name": "Nasha Mukti Kendra And Rehabilitation Center",
+    "lat": 22.694261,
+    "lon": 75.908379,
+    "osm_id": "node/7288224390",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H205",
+    "name": "Shri Bharat Hospital",
+    "lat": 22.755157,
+    "lon": 75.867187,
+    "osm_id": "node/7288224392",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H206",
+    "name": "Arogya Hospital",
+    "lat": 22.740934,
+    "lon": 75.837147,
+    "osm_id": "node/7288224393",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H207",
+    "name": "Sangam Hospital",
+    "lat": 22.739964,
+    "lon": 75.840093,
+    "osm_id": "node/7288224417",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H208",
+    "name": "Arpit Hospital",
+    "lat": 22.712204,
+    "lon": 75.906223,
+    "osm_id": "node/8892155969",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H209",
+    "name": "Vinayaka Hospital",
+    "lat": 22.729955,
+    "lon": 75.903638,
+    "osm_id": "node/11690381787",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H210",
+    "name": "Chacha Nehru Bal Chikitsalay",
+    "lat": 22.714665,
+    "lon": 75.880877,
+    "osm_id": "way/322674430",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H211",
+    "name": "Life Care Hospital - Indore",
+    "lat": 22.762351,
+    "lon": 75.884432,
+    "osm_id": "way/439506067",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H212",
+    "name": "Bapat Hospital",
+    "lat": 22.756096,
+    "lon": 75.87961,
+    "osm_id": "way/677244732",
+    "has_emergency": false,
+    "is_major": false
+  },
+  {
+    "hospital_id": "H213",
+    "name": "Nahar Hospital",
+    "lat": 22.75525,
+    "lon": 75.877643,
+    "osm_id": "way/677245185",
+    "has_emergency": false,
+    "is_major": false
+  }
+]
