@@ -2,7 +2,7 @@ import pytest
 from app.core import db
 from app.core.enums import AccidentStatus as S
 from app.core.schemas import AccidentReport, Location
-
+from app.core.schemas import Weather
 
 @pytest.fixture(autouse=True)
 def temp_db(tmp_path, monkeypatch):
@@ -43,3 +43,15 @@ def test_full_happy_path():
     for step in [S.AMBULANCE_ASSIGNED, S.EN_ROUTE, S.ARRIVED, S.RESOLVED]:
         acc = db.change_status(acc.accident_id, step)
     assert acc.status == S.RESOLVED
+
+def test_new_fields_round_trip():
+    acc = db.add_accident(
+        AccidentReport(location=Location(lat=22.72, lon=75.86), severity="HIGH",
+                       source="camera", camera_id="home-1", detection_confidence=0.91),
+        weather=Weather(precipitation_mm=2.0, summary="rain"),
+        road_type="primary")
+    got = db.get_accident(acc.accident_id)
+    assert got.source == "camera" and got.camera_id == "home-1"
+    assert got.detection_confidence == 0.91
+    assert got.weather.summary == "rain"
+    assert got.road_type == "primary"

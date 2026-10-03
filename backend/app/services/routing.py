@@ -24,3 +24,14 @@ def snap_distance_m(lat, lon):
     n = snap_to_node(lat, lon)
     return ox.distance.great_circle(lat, lon, G.nodes[n]['y'], G.nodes[n]['x'])
 
+def road_type_at(lat: float, lon: float) -> str | None:
+    """OSM road class (primary, residential...) of the road nearest this point."""
+    G = get_graph()
+    n = snap_to_node(lat, lon)
+    for _, _, d in G.edges(n, data=True):
+        hw = d.get("highway")
+        if isinstance(hw, list):
+            hw = hw[0]
+        if hw:
+            return hw
+    return None

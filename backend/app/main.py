@@ -13,6 +13,8 @@ from fastapi.responses import FileResponse
 from app.core.config import ROOT
 from app.core.enums import AccidentStatus, AmbulanceStatus
 from app.services.dispatch import STRATEGIES, dispatch_pending
+from app.services.weather import get_weather
+from app.services.routing import road_type_at
 
 
 @asynccontextmanager
@@ -58,7 +60,9 @@ def report_accident(report: AccidentReport):
     loc = report.location
     if not (LAT_MIN <= loc.lat <= LAT_MAX and LON_MIN <= loc.lon <= LON_MAX):
         raise HTTPException(422, "Location is outside the Indore map area")
-    return db.add_accident(report)
+    weather = get_weather(loc.lat, loc.lon)
+    road = road_type_at(loc.lat, loc.lon)
+    return db.add_accident(report, weather=weather, road_type=road)
 
 
 @app.get("/accidents/{accident_id}", response_model=Accident)
