@@ -49,75 +49,75 @@
   },
   {
     "ambulance_id": "A09",
-    "base_name": "District Hospital,Indore",
-    "lat": 22.708825,
-    "lon": 75.830806
+    "base_name": "Shri Malwa Hospital and Research Center",
+    "lat": 22.727838,
+    "lon": 75.825323
   },
   {
     "ambulance_id": "A10",
-    "base_name": "District Hospital,Indore",
-    "lat": 22.708825,
-    "lon": 75.830806
+    "base_name": "Shri Malwa Hospital and Research Center",
+    "lat": 22.727838,
+    "lon": 75.825323
   },
   {
     "ambulance_id": "A11",
-    "base_name": "Indore Institute Of Medical Scinces",
-    "lat": 22.761195,
-    "lon": 75.896181
+    "base_name": "Choithram Hospital and Research Centre",
+    "lat": 22.689291,
+    "lon": 75.852941
   },
   {
     "ambulance_id": "A12",
+    "base_name": "Choithram Hospital and Research Centre",
+    "lat": 22.689291,
+    "lon": 75.852941
+  },
+  {
+    "ambulance_id": "A13",
     "base_name": "Indore Institute Of Medical Scinces",
     "lat": 22.761195,
     "lon": 75.896181
   },
   {
-    "ambulance_id": "A13",
-    "base_name": "Vishesh Jupiter Hospital",
-    "lat": 22.684547,
-    "lon": 75.881638
-  },
-  {
     "ambulance_id": "A14",
-    "base_name": "Vishesh Jupiter Hospital",
-    "lat": 22.684547,
-    "lon": 75.881638
+    "base_name": "Indore Institute Of Medical Scinces",
+    "lat": 22.761195,
+    "lon": 75.896181
   },
   {
     "ambulance_id": "A15",
-    "base_name": "Patanjali Medical And Store",
-    "lat": 22.67357,
-    "lon": 75.832191
+    "base_name": "St.Francis Hospital And Research Centre",
+    "lat": 22.672328,
+    "lon": 75.915039
   },
   {
     "ambulance_id": "A16",
-    "base_name": "Patanjali Medical And Store",
-    "lat": 22.67357,
-    "lon": 75.832191
+    "base_name": "St.Francis Hospital And Research Centre",
+    "lat": 22.672328,
+    "lon": 75.915039
   },
   {
     "ambulance_id": "A17",
-    "base_name": "Choithram Hospital and Research Centre",
-    "lat": 22.689291,
-    "lon": 75.852941
+    "base_name": "Super Speciality Hospital",
+    "lat": 22.696983,
+    "lon": 75.882093
   },
   {
     "ambulance_id": "A18",
-    "base_name": "Choithram Hospital and Research Centre",
-    "lat": 22.689291,
-    "lon": 75.852941
+    "base_name": "Super Speciality Hospital",
+    "lat": 22.696983,
+    "lon": 75.882093
   },
   {
     "ambulance_id": "A19",
-    "base_name": "Tanish Medical Care",
-    "lat": 22.71648,
-    "lon": 75.854794
+    "base_name": "Al Shifa National Hospital and Research Centre",
+    "lat": 22.730917,
+    "lon": 75.850564
   },
   {
     "ambulance_id": "A20",
-    "base_name": "Tanish Medical Care",
-    "lat": 22.71648,
-    "lon": 75.854794
+    "base_name": "Al Shifa National Hospital and Research Centre",
+    "lat": 22.730917,
+    "lon": 75.850564
   },
   {
     "ambulance_id": "A21",
@@ -133,170 +133,170 @@
   },
   {
     "ambulance_id": "A23",
-    "base_name": "Indore Medical Hall",
-    "lat": 22.739516,
-    "lon": 75.880541
+    "base_name": "Aryan Hospital and Research Centre",
+    "lat": 22.68615,
+    "lon": 75.829284
   },
   {
     "ambulance_id": "A24",
-    "base_name": "Indore Medical Hall",
-    "lat": 22.739516,
-    "lon": 75.880541
+    "base_name": "Aryan Hospital and Research Centre",
+    "lat": 22.68615,
+    "lon": 75.829284
   },
   {
     "ambulance_id": "A25",
-    "base_name": "Choithram hospital and research center indore",
-    "lat": 22.703622,
-    "lon": 75.855708
+    "base_name": "Shri Sai Baba Hospital & Research Centre",
+    "lat": 22.710007,
+    "lon": 75.84975
   },
   {
     "ambulance_id": "A26",
+    "base_name": "Shri Sai Baba Hospital & Research Centre",
+    "lat": 22.710007,
+    "lon": 75.84975
+  },
+  {
+    "ambulance_id": "A27",
+    "base_name": "Lady Halima Hospital And Research Center",
+    "lat": 22.731565,
+    "lon": 75.91203
+  },
+  {
+    "ambulance_id": "A28",
+    "base_name": "Lady Halima Hospital And Research Center",
+    "lat": 22.731565,
+    "lon": 75.91203
+  },
+  {
+    "ambulance_id": "A29",
+    "base_name": "Devi Ahilya Hospital and Research Centre",
+    "lat": 22.716122,
+    "lon": 75.871797
+  },
+  {
+    "ambulance_id": "A30",
+    "base_name": "Devi Ahilya Hospital and Research Centre",
+    "lat": 22.716122,
+    "lon": 75.871797
+  },
+  {
+    "ambulance_id": "A31",
+    "base_name": "City Hospital and Research Centre",
+    "lat": 22.733899,
+    "lon": 75.873866
+  },
+  {
+    "ambulance_id": "A32",
+    "base_name": "City Hospital and Research Centre",
+    "lat": 22.733899,
+    "lon": 75.873866
+  },
+  {
+    "ambulance_id": "A33",
+    "base_name": "District Hospital,Indore",
+    "lat": 22.708825,
+    "lon": 75.830806
+  },
+  {
+    "ambulance_id": "A34",
+    "base_name": "District Hospital,Indore",
+    "lat": 22.708825,
+    "lon": 75.830806
+  },
+  {
+    "ambulance_id": "A35",
+    "base_name": "Mediplus Hospital and Research Centre",
+    "lat": 22.759468,
+    "lon": 75.878899
+  },
+  {
+    "ambulance_id": "A36",
+    "base_name": "Mediplus Hospital and Research Centre",
+    "lat": 22.759468,
+    "lon": 75.878899
+  },
+  {
+    "ambulance_id": "A37",
+    "base_name": "Medanta",
+    "lat": 22.748748,
+    "lon": 75.895942
+  },
+  {
+    "ambulance_id": "A38",
+    "base_name": "Medanta",
+    "lat": 22.748748,
+    "lon": 75.895942
+  },
+  {
+    "ambulance_id": "A39",
+    "base_name": "Vishesh Jupiter Hospital",
+    "lat": 22.684547,
+    "lon": 75.881638
+  },
+  {
+    "ambulance_id": "A40",
+    "base_name": "Vishesh Jupiter Hospital",
+    "lat": 22.684547,
+    "lon": 75.881638
+  },
+  {
+    "ambulance_id": "A41",
+    "base_name": "Shakuntala Devi Hospital And Research Centre",
+    "lat": 22.717567,
+    "lon": 75.905712
+  },
+  {
+    "ambulance_id": "A42",
+    "base_name": "Shakuntala Devi Hospital And Research Centre",
+    "lat": 22.717567,
+    "lon": 75.905712
+  },
+  {
+    "ambulance_id": "A43",
+    "base_name": "bombay hospital",
+    "lat": 22.754573,
+    "lon": 75.903697
+  },
+  {
+    "ambulance_id": "A44",
+    "base_name": "bombay hospital",
+    "lat": 22.754573,
+    "lon": 75.903697
+  },
+  {
+    "ambulance_id": "A45",
+    "base_name": "Bafna Hospital and Orthopaedic Research Centre",
+    "lat": 22.715736,
+    "lon": 75.84197
+  },
+  {
+    "ambulance_id": "A46",
+    "base_name": "Bafna Hospital and Orthopaedic Research Centre",
+    "lat": 22.715736,
+    "lon": 75.84197
+  },
+  {
+    "ambulance_id": "A47",
+    "base_name": "Ent Hospital and Research Centre",
+    "lat": 22.720575,
+    "lon": 75.881918
+  },
+  {
+    "ambulance_id": "A48",
+    "base_name": "Ent Hospital and Research Centre",
+    "lat": 22.720575,
+    "lon": 75.881918
+  },
+  {
+    "ambulance_id": "A49",
     "base_name": "Choithram hospital and research center indore",
     "lat": 22.703622,
     "lon": 75.855708
   },
   {
-    "ambulance_id": "A27",
-    "base_name": "Medanta",
-    "lat": 22.748748,
-    "lon": 75.895942
-  },
-  {
-    "ambulance_id": "A28",
-    "base_name": "Medanta",
-    "lat": 22.748748,
-    "lon": 75.895942
-  },
-  {
-    "ambulance_id": "A29",
-    "base_name": "Super Speciality Hospital",
-    "lat": 22.696983,
-    "lon": 75.882093
-  },
-  {
-    "ambulance_id": "A30",
-    "base_name": "Super Speciality Hospital",
-    "lat": 22.696983,
-    "lon": 75.882093
-  },
-  {
-    "ambulance_id": "A31",
-    "base_name": "Apollo Hospital",
-    "lat": 22.757616,
-    "lon": 75.885175
-  },
-  {
-    "ambulance_id": "A32",
-    "base_name": "Apollo Hospital",
-    "lat": 22.757616,
-    "lon": 75.885175
-  },
-  {
-    "ambulance_id": "A33",
-    "base_name": "Shalby Hospitals",
-    "lat": 22.729057,
-    "lon": 75.879285
-  },
-  {
-    "ambulance_id": "A34",
-    "base_name": "Shalby Hospitals",
-    "lat": 22.729057,
-    "lon": 75.879285
-  },
-  {
-    "ambulance_id": "A35",
-    "base_name": "Kailash Hospital",
-    "lat": 22.708828,
-    "lon": 75.846443
-  },
-  {
-    "ambulance_id": "A36",
-    "base_name": "Kailash Hospital",
-    "lat": 22.708828,
-    "lon": 75.846443
-  },
-  {
-    "ambulance_id": "A37",
-    "base_name": "bombay hospital",
-    "lat": 22.754573,
-    "lon": 75.903697
-  },
-  {
-    "ambulance_id": "A38",
-    "base_name": "bombay hospital",
-    "lat": 22.754573,
-    "lon": 75.903697
-  },
-  {
-    "ambulance_id": "A39",
-    "base_name": "Life Line Hospital",
-    "lat": 22.733235,
-    "lon": 75.890461
-  },
-  {
-    "ambulance_id": "A40",
-    "base_name": "Life Line Hospital",
-    "lat": 22.733235,
-    "lon": 75.890461
-  },
-  {
-    "ambulance_id": "A41",
-    "base_name": "NAMAH HOSPITAL AND LAPAROSCOPIC CENTRE",
-    "lat": 22.753011,
-    "lon": 75.892115
-  },
-  {
-    "ambulance_id": "A42",
-    "base_name": "NAMAH HOSPITAL AND LAPAROSCOPIC CENTRE",
-    "lat": 22.753011,
-    "lon": 75.892115
-  },
-  {
-    "ambulance_id": "A43",
-    "base_name": "Govindram Saxeriya Charitable Trust Hospital",
-    "lat": 22.730796,
-    "lon": 75.874938
-  },
-  {
-    "ambulance_id": "A44",
-    "base_name": "Govindram Saxeriya Charitable Trust Hospital",
-    "lat": 22.730796,
-    "lon": 75.874938
-  },
-  {
-    "ambulance_id": "A45",
-    "base_name": "Eurekaa Hospital",
-    "lat": 22.723346,
-    "lon": 75.889089
-  },
-  {
-    "ambulance_id": "A46",
-    "base_name": "Eurekaa Hospital",
-    "lat": 22.723346,
-    "lon": 75.889089
-  },
-  {
-    "ambulance_id": "A47",
-    "base_name": "Shri Aurobindo Institute Of Medical Sciences",
-    "lat": 22.797218,
-    "lon": 75.845192
-  },
-  {
-    "ambulance_id": "A48",
-    "base_name": "Shri Aurobindo Institute Of Medical Sciences",
-    "lat": 22.797218,
-    "lon": 75.845192
-  },
-  {
-    "ambulance_id": "A49",
-    "base_name": "CHL CBCC Cancer Centre",
-    "lat": 22.732384,
-    "lon": 75.889194
-  },
-  {
     "ambulance_id": "A50",
-    "base_name": "CHL CBCC Cancer Centre",
-    "lat": 22.732384,
-    "lon": 75.889194
+    "base_name": "Choithram hospital and research center indore",
+    "lat": 22.703622,
+    "lon": 75.855708
   }
 ]
