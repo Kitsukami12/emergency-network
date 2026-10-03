@@ -9,3 +9,5 @@ numpy
 pandas
 python-multipart
 pytestscikit-learn
+opencv-python
+opencv-python
