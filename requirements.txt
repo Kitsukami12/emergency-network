@@ -13,3 +13,4 @@ opencv-python
 opencv-python
 torch
 torchvision
+ultralytics
