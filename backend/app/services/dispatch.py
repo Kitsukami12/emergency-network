@@ -1,7 +1,7 @@
 from app.core import db
 from app.core.enums import AccidentStatus, AmbulanceStatus
 from app.services.assignment import assign_hungarian, assign_nearest
-from app.services.astar import route_between
+from app.services.traffic import best_route
 
 STRATEGIES = {"nearest": assign_nearest, "hungarian": assign_hungarian}
 
@@ -20,7 +20,7 @@ def dispatch_pending(strategy: str = "hungarian") -> list[dict]:
     results = []
     for acc_id, amb_id in assignment.items():
         amb, acc = ambs[amb_id], accs[acc_id]
-        route = route_between(amb.location.lat, amb.location.lon,
+        route = best_route(amb.location.lat, amb.location.lon,
                               acc.location.lat, acc.location.lon)
         db.assign_ambulance(acc_id, amb_id)
         db.change_status(acc_id, AccidentStatus.AMBULANCE_ASSIGNED)  # your rulebook checks this
@@ -31,5 +31,6 @@ def dispatch_pending(strategy: str = "hungarian") -> list[dict]:
             "strategy": strategy,
             "distance_km": route["distance_km"] if route else None,
             "eta_min": route["estimated_time_min"] if route else None,
+            "source": route["source"] if route else None
         })
     return results
