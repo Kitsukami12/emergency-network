@@ -1,6 +1,8 @@
 import sqlite3
 import uuid
 import json
+import json
+from datetime import datetime, timezone
 
 from contextlib import contextmanager
 
@@ -37,7 +39,25 @@ CREATE TABLE IF NOT EXISTS accidents (
     detected_at           TEXT,
     weather_json          TEXT,
     road_type             TEXT
+    
 );
+
+CREATE TABLE IF NOT EXISTS hospitals (
+    hospital_id TEXT PRIMARY KEY,
+    name        TEXT NOT NULL,
+    lat         REAL NOT NULL,
+    lon         REAL NOT NULL,
+    is_major    INTEGER NOT NULL DEFAULT 0
+);
+CREATE TABLE IF NOT EXISTS notifications (
+    notification_id TEXT PRIMARY KEY,
+    accident_id     TEXT NOT NULL,
+    hospital_id     TEXT NOT NULL,
+    created_at      TEXT NOT NULL,
+    status          TEXT NOT NULL,
+    payload_json    TEXT NOT NULL
+);
+
 """
 
 
@@ -187,3 +207,48 @@ def set_ambulance_status(ambulance_id: str, status: AmbulanceStatus) -> None:
             "UPDATE ambulances SET status = ? WHERE ambulance_id = ?",
             (status.value, ambulance_id),
         )
+
+def seed_hospitals(hospitals: list[dict]) -> None:
+    with connect() as conn:
+        for h in hospitals:
+            conn.execute(
+                "INSERT OR IGNORE INTO hospitals VALUES (?, ?, ?, ?, ?)",
+                (h["hospital_id"], h["name"], h["lat"], h["lon"], int(h.get("is_major", False))),
+            )
+
+
+def list_hospitals() -> list[dict]:
+    with connect() as conn:
+        rows = conn.execute("SELECT * FROM hospitals ORDER BY hospital_id").fetchall()
+    return [dict(r) | {"is_major": bool(r["is_major"])} for r in rows]
+
+
+def add_notification(accident_id: str, hospital_id: str, payload: dict) -> dict:
+    nid = "NTF-" + uuid.uuid4().hex[:8]
+    created = datetime.now(timezone.utc).isoformat()
+    with connect() as conn:
+        conn.execute(
+            "INSERT INTO notifications VALUES (?, ?, ?, ?, ?, ?)",
+            (nid, accident_id, hospital_id, created, "NEW", json.dumps(payload)),
+        )
+    return {"notification_id": nid, "accident_id": accident_id, "hospital_id": hospital_id,
+            "created_at": created, "status": "NEW", "payload": payload}
+
+
+def list_notifications(hospital_id: str | None = None) -> list[dict]:
+    q, args = "SELECT * FROM notifications", ()
+    if hospital_id:
+        q, args = q + " WHERE hospital_id = ?", (hospital_id,)
+    with connect() as conn:
+        rows = conn.execute(q + " ORDER BY created_at DESC", args).fetchall()
+    return [{**{k: r[k] for k in ("notification_id", "accident_id", "hospital_id",
+                                  "created_at", "status")},
+             "payload": json.loads(r["payload_json"])} for r in rows]
+
+
+def set_notification_status(nid: str, status: str) -> None:
+    with connect() as conn:
+        cur = conn.execute("UPDATE notifications SET status = ? WHERE notification_id = ?",
+                           (status, nid))
+        if cur.rowcount == 0:
+            raise LookupError(nid)

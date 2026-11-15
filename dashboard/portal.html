@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hospital Portal - Emergency Network</title>
+<style>
+  :root { --bg:#0b171d; --panel:#12242d; --line:#20404d; --text:#e6f0f3; --mute:#88a3ae; --accent:#38bdf8; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:system-ui,sans-serif; }
+  header { display:flex; align-items:center; gap:14px; padding:12px 20px; background:var(--panel); border-bottom:1px solid var(--line); }
+  header h1 { font-size:18px; margin:0; }
+  .badge { font-size:11px; padding:3px 8px; border-radius:999px; border:1px solid #f59e0b; color:#f59e0b; }
+  .spacer { flex:1; }
+  select, button { background:#0d1d25; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 12px; font-size:13px; }
+  button { cursor:pointer; } button:hover { border-color:var(--accent); }
+  button.ok { background:#16a34a; border-color:#16a34a; color:#fff; }
+  button.no { background:#7f1d1d; border-color:#7f1d1d; color:#fff; }
+  main { max-width:900px; margin:20px auto; padding:0 16px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:14px; display:flex; gap:16px; }
+  .card.new { border-color:var(--accent); }
+  .card img { width:200px; height:auto; border-radius:6px; align-self:flex-start; }
+  .sev { font-size:12px; font-weight:700; padding:3px 9px; border-radius:5px; color:#111; }
+  .grid { display:grid; grid-template-columns:auto 1fr; gap:4px 14px; margin:10px 0; font-size:14px; }
+  .grid span:nth-child(odd) { color:var(--mute); }
+  .note { font-size:12px; color:var(--mute); margin-top:8px; }
+  .actions { margin-top:10px; display:flex; gap:8px; }
+  .status { font-size:12px; color:var(--mute); }
+  .empty { color:var(--mute); text-align:center; padding:60px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Hospital Portal</h1><span class="badge">Decision-support prototype</span>
+  <span class="spacer"></span>
+  <label style="font-size:12px;color:var(--mute)">Hospital</label>
+  <select id="hospital"><option value="">All hospitals</option></select>
+</header>
+<main id="list"><div class="empty">Loading...</div></main>
+
+<script>
+const SEV = { LOW:'#eab308', MEDIUM:'#f97316', HIGH:'#ef4444', CRITICAL:'#b91c1c' };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function loadHospitals() {
+  const hs = await fetch('/hospitals').then(r => r.json());
+  const sel = document.getElementById('hospital');
+  hs.filter(h => h.is_major).forEach(h => sel.add(new Option(h.name, h.hospital_id)));
+}
+
+async function refresh() {
+  const id = document.getElementById('hospital').value;
+  const items = await fetch('/notifications' + (id ? '?hospital_id=' + encodeURIComponent(id) : '')).then(r => r.json());
+  document.getElementById('list').innerHTML = items.map(n => {
+    const p = n.payload, w = p.weather;
+    const img = p.frame_path ? `<img src="/frames/${encodeURIComponent(p.frame_path.split('/').pop())}" alt="scene">` : '';
+    const buttons = n.status === 'NEW' || n.status === 'ACKNOWLEDGED' ? `<div class="actions">
+        <button class="ok" onclick="setStatus('${n.notification_id}','ACCEPTED')">Accept</button>
+        <button class="no" onclick="setStatus('${n.notification_id}','DECLINED')">Decline</button>
+        ${n.status === 'NEW' ? `<button onclick="setStatus('${n.notification_id}','ACKNOWLEDGED')">Acknowledge</button>` : ''}
+      </div>` : '';
+    return `<div class="card ${n.status === 'NEW' ? 'new' : ''}">${img}<div style="flex:1">
+      <span class="sev" style="background:${SEV[p.severity_estimate] || '#888'}">${esc(p.severity_estimate)}</span>
+      <b style="margin-left:8px">${esc(p.accident_id)}</b>
+      <span class="status" style="float:right">${esc(n.status)} · ${new Date(n.created_at).toLocaleTimeString()}</span>
+      <div class="grid">
+        <span>Sent to</span><span>${esc(p.hospital)}</span>
+        <span>Scene to hospital</span><span>${esc(p.scene_to_hospital_min)} min</span>
+        <span>Vehicles involved</span><span>${esc(p.vehicles_involved ?? 'unknown')}</span>
+        <span>People in scene (approx.)</span><span>${esc(p.people_in_scene ?? 'unknown')}</span>
+        <span>Detection confidence</span><span>${p.detection_confidence != null ? esc(p.detection_confidence) : 'manual report'}</span>
+        <span>Source</span><span>${esc(p.camera_id ?? 'manual')}</span>
+        <span>Weather</span><span>${w ? esc(w.summary) + ', ' + esc(w.temperature_c) + ' C' : 'n/a'}</span>
+        <span>Location</span><span>${esc(p.location.lat.toFixed(4))}, ${esc(p.location.lon.toFixed(4))}</span>
+      </div>
+      <div class="note">${esc(p.note)}</div>${buttons}</div></div>`;
+  }).join('') || '<div class="empty">No notifications.</div>';
+}
+
+async function setStatus(id, status) {
+  await fetch(`/notifications/${id}/status`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ status }) });
+  refresh();
+}
+
+document.getElementById('hospital').addEventListener('change', refresh);
+loadHospitals().then(refresh);
+setInterval(refresh, 3000);
+</script>
+</body>
+</html>

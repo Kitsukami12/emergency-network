@@ -5,7 +5,7 @@ GRAPH_FILE = ROOT / "data" / "graph" / "indore.graphml"
 AMBULANCE_SEED = ROOT / "data" / "seeds" / "ambulances.json"
 LOG_DIR = ROOT / "logs"
 DB_FILE = ROOT / "data" / "emergency.db"
-
+HOSPITALS_SEED = ROOT / "data" / "seeds" / "hospitals_clean.json"
 # Map boundaries: paste the numbers you just printed
 LAT_MIN, LAT_MAX = 22.6297, 22.8095
 LON_MIN, LON_MAX = 75.7611, 75.9552

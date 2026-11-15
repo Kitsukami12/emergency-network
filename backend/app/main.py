@@ -1,48 +1,51 @@
+import json
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from app.core import db
-from app.core.config import AMBULANCE_SEED, LAT_MAX, LAT_MIN, LON_MAX, LON_MIN
-from app.core.enums import AccidentStatus
+from app.core.config import (AMBULANCE_SEED, HOSPITALS_SEED, LAT_MAX, LAT_MIN,
+                             LON_MAX, LON_MIN, ROOT)
+from app.core.enums import AccidentStatus, AmbulanceStatus
 from app.core.schemas import Accident, AccidentReport, Ambulance
 from app.core.seeds import load_ambulances
-from app.services.astar import route_between
-from fastapi.responses import FileResponse
-from app.core.config import ROOT
-from app.core.enums import AccidentStatus, AmbulanceStatus
 from app.services.dispatch import STRATEGIES, dispatch_pending
-from app.services.weather import get_weather
+from app.services.notify import notify_nearest
 from app.services.routing import road_type_at
+from app.services.traffic import best_route
+from app.services.weather import get_weather
+
+FRAMES_DIR = ROOT / "results" / "frames"
+FRAMES_DIR.mkdir(parents=True, exist_ok=True)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     db.init_db()
     db.seed_ambulances(load_ambulances(AMBULANCE_SEED))
+    db.seed_hospitals(json.loads(HOSPITALS_SEED.read_text()))
     yield
 
 
 app = FastAPI(title="AI Emergency Response Network", lifespan=lifespan)
-@app.get("/accidents", response_model=list[Accident])
-def get_accidents():
-    return db.list_accidents()
+app.mount("/frames", StaticFiles(directory=FRAMES_DIR), name="frames")
 
+NEXT_STATUS = {
+    AccidentStatus.AMBULANCE_ASSIGNED: AccidentStatus.EN_ROUTE,
+    AccidentStatus.EN_ROUTE: AccidentStatus.ARRIVED,
+    AccidentStatus.ARRIVED: AccidentStatus.RESOLVED,
+}
 
-@app.get("/route")
-def get_route(from_lat: float, from_lon: float, to_lat: float, to_lon: float):
-    result = route_between(from_lat, from_lon, to_lat, to_lon)
-    if result is None:
-        raise HTTPException(404, "ROUTE UNAVAILABLE")
-    return result
-
-@app.get("/map", include_in_schema=False)
-def map_page():
-    return FileResponse(ROOT / "dashboard" / "index.html")
 
 class StatusChange(BaseModel):
     new_status: AccidentStatus
+
+
+class NotificationStatus(BaseModel):
+    status: str
 
 
 @app.get("/health")
@@ -50,9 +53,29 @@ def health():
     return {"status": "ok"}
 
 
+@app.get("/map", include_in_schema=False)
+def map_page():
+    return FileResponse(ROOT / "dashboard" / "index.html")
+
+
+@app.get("/portal", include_in_schema=False)
+def portal_page():
+    return FileResponse(ROOT / "dashboard" / "portal.html")
+
+
 @app.get("/ambulances", response_model=list[Ambulance])
 def get_ambulances():
     return db.list_ambulances()
+
+
+@app.get("/hospitals")
+def get_hospitals():
+    return db.list_hospitals()
+
+
+@app.get("/accidents", response_model=list[Accident])
+def get_accidents():
+    return db.list_accidents()
 
 
 @app.post("/accidents", response_model=Accident, status_code=201)
@@ -62,7 +85,12 @@ def report_accident(report: AccidentReport):
         raise HTTPException(422, "Location is outside the Indore map area")
     weather = get_weather(loc.lat, loc.lon)
     road = road_type_at(loc.lat, loc.lon)
-    return db.add_accident(report, weather=weather, road_type=road)
+    accident = db.add_accident(report, weather=weather, road_type=road)
+    try:
+        notify_nearest(accident)        # a notification failure must never block the incident
+    except Exception as e:
+        print("notification failed:", e)
+    return accident
 
 
 @app.get("/accidents/{accident_id}", response_model=Accident)
@@ -83,20 +111,6 @@ def change_accident_status(accident_id: str, change: StatusChange):
         raise HTTPException(409, str(e))
 
 
-NEXT_STATUS = {
-    AccidentStatus.AMBULANCE_ASSIGNED: AccidentStatus.EN_ROUTE,
-    AccidentStatus.EN_ROUTE: AccidentStatus.ARRIVED,
-    AccidentStatus.ARRIVED: AccidentStatus.RESOLVED,
-}
-
-
-@app.post("/dispatch")
-def dispatch(strategy: str = "hungarian"):
-    if strategy not in STRATEGIES:
-        raise HTTPException(400, f"strategy must be one of {list(STRATEGIES)}")
-    return dispatch_pending(strategy)
-
-
 @app.post("/accidents/{accident_id}/advance", response_model=Accident)
 def advance(accident_id: str):
     """Demo control: move an accident one step along its journey."""
@@ -113,3 +127,34 @@ def advance(accident_id: str):
         elif nxt == AccidentStatus.RESOLVED:
             db.set_ambulance_status(acc.assigned_ambulance_id, AmbulanceStatus.AVAILABLE)
     return updated
+
+
+@app.get("/route")
+def get_route(from_lat: float, from_lon: float, to_lat: float, to_lon: float):
+    result = best_route(from_lat, from_lon, to_lat, to_lon)
+    if result is None:
+        raise HTTPException(404, "ROUTE UNAVAILABLE")
+    return result
+
+
+@app.post("/dispatch")
+def dispatch(strategy: str = "hungarian"):
+    if strategy not in STRATEGIES:
+        raise HTTPException(400, f"strategy must be one of {list(STRATEGIES)}")
+    return dispatch_pending(strategy)
+
+
+@app.get("/notifications")
+def get_notifications(hospital_id: str | None = None):
+    return db.list_notifications(hospital_id)
+
+
+@app.post("/notifications/{nid}/status")
+def update_notification(nid: str, body: NotificationStatus):
+    if body.status not in {"ACKNOWLEDGED", "ACCEPTED", "DECLINED"}:
+        raise HTTPException(400, "status must be ACKNOWLEDGED, ACCEPTED or DECLINED")
+    try:
+        db.set_notification_status(nid, body.status)
+    except LookupError:
+        raise HTTPException(404, "Notification not found")
+    return {"notification_id": nid, "status": body.status}
