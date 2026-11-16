@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS accidents (
     vehicle_count         INTEGER,
     detected_at           TEXT,
     weather_json          TEXT,
+    people_count INTEGER,
     road_type             TEXT
     
 );
@@ -117,14 +118,15 @@ def add_accident(report: AccidentReport, weather: Weather | None = None,
         conn.execute(
             """INSERT INTO accidents (accident_id, lat, lon, severity, description, status,
                    assigned_ambulance_id, reported_at, source, camera_id, detection_confidence,
-                   severity_confidence, frame_path, vehicle_count, detected_at,
+                   severity_confidence, frame_path, vehicle_count, people_count, detected_at,
                    weather_json, road_type)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (accident.accident_id, accident.location.lat, accident.location.lon,
              accident.severity.value, accident.description, accident.status.value,
              accident.assigned_ambulance_id, accident.reported_at.isoformat(),
              accident.source, accident.camera_id, accident.detection_confidence,
              accident.severity_confidence, accident.frame_path, accident.vehicle_count,
+             accident.people_count,
              accident.detected_at.isoformat() if accident.detected_at else None,
              weather.model_dump_json() if weather else None, road_type),
         )
@@ -152,11 +154,11 @@ def get_accident(accident_id: str) -> Accident | None:
         severity_confidence=r["severity_confidence"],
         frame_path=r["frame_path"],
         vehicle_count=r["vehicle_count"],
+        people_count=r["people_count"],
         detected_at=r["detected_at"],
         weather=Weather.model_validate_json(r["weather_json"]) if r["weather_json"] else None,
         road_type=r["road_type"],
     )
-
 
 class IllegalTransition(Exception):
     pass

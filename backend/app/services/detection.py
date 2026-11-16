@@ -3,14 +3,13 @@ from pathlib import Path
 
 
 class StubDetector:
-    """PLACEHOLDER until the trained model exists.
-    Scores 0.95 while the file results/trigger exists, otherwise 0.05.
-    Create the file to simulate an accident; delete it to stop."""
+    def __init__(self, trigger="results/trigger"):
+        self.trigger = Path(trigger)
 
     def score(self, frame) -> float:
-        return 0.95 if Path("results/trigger").exists() else 0.05
+        return 0.95 if self.trigger.exists() else 0.05
 
-
+    
 class TemporalRule:
     """Raise an incident only when `needed` of the last `window` frame scores are
     above `threshold`. After raising, stay quiet for `cooldown_s` seconds, so one

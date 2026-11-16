@@ -41,6 +41,7 @@ class AccidentReport(BaseModel):
     frame_path: Optional[str] = None
     vehicle_count: Optional[int] = None
     detected_at: Optional[datetime] = None
+    people_count: Optional[int] = None
 
 
 class Accident(AccidentReport):

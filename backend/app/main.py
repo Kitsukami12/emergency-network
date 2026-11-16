@@ -1,4 +1,14 @@
 import json
+import os
+import secrets
+import base64
+
+from fastapi import Request
+from fastapi.responses import Response
+
+from fastapi.params import Header
+from dotenv import load_dotenv
+
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
@@ -18,6 +28,10 @@ from app.services.routing import road_type_at
 from app.services.traffic import best_route
 from app.services.weather import get_weather
 
+load_dotenv()
+
+AGENT_KEY = os.getenv("AGENT_API_KEY")
+
 FRAMES_DIR = ROOT / "results" / "frames"
 FRAMES_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -31,6 +45,27 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="AI Emergency Response Network", lifespan=lifespan)
+DASHBOARD_PIN = os.getenv("DASHBOARD_PIN")
+
+
+@app.middleware("http")
+async def require_login(request: Request, call_next):
+    if not DASHBOARD_PIN or request.url.path == "/health":
+        return await call_next(request)
+    key = request.headers.get("x-api-key", "")
+    if (request.method == "POST" and request.url.path == "/accidents" and AGENT_KEY
+            and secrets.compare_digest(key.encode(), AGENT_KEY.encode())):
+        return await call_next(request)               # camera agents
+    auth = request.headers.get("authorization", "")
+    if auth.startswith("Basic "):
+        try:
+            _, _, pw = base64.b64decode(auth[6:]).decode().partition(":")
+            if secrets.compare_digest(pw.encode(), DASHBOARD_PIN.encode()):
+                return await call_next(request)       # people using the dashboard
+        except Exception:
+            pass
+    return Response("Login required", status_code=401,
+                    headers={"WWW-Authenticate": 'Basic realm="Emergency Network"'})
 app.mount("/frames", StaticFiles(directory=FRAMES_DIR), name="frames")
 
 NEXT_STATUS = {
@@ -79,7 +114,10 @@ def get_accidents():
 
 
 @app.post("/accidents", response_model=Accident, status_code=201)
-def report_accident(report: AccidentReport):
+def report_accident(report: AccidentReport, x_api_key: str | None = Header(default=None)):
+    if report.source == "camera" and AGENT_KEY and not secrets.compare_digest(
+            x_api_key or "", AGENT_KEY):
+        raise HTTPException(401, "invalid or missing API key")
     loc = report.location
     if not (LAT_MIN <= loc.lat <= LAT_MAX and LON_MIN <= loc.lon <= LON_MAX):
         raise HTTPException(422, "Location is outside the Indore map area")

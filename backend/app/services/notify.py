@@ -34,6 +34,7 @@ def build_payload(acc: Accident, hospital: dict, eta_min: float) -> dict:
         "severity_confidence": acc.severity_confidence,
         "detection_confidence": acc.detection_confidence,
         "vehicles_involved": acc.vehicle_count,
+        "people_in_scene": acc.people_count,
         "camera_id": acc.camera_id,
         "frame_path": acc.frame_path,
         "detected_at": acc.detected_at.isoformat() if acc.detected_at else None,
