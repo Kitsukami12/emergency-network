@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulation Lab – AI Emergency Response Network</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-sA+e2kF+5zSxT6A2K+6n3QJ7uMzc+7uW2U8G2Z1w5JE=" crossorigin="" />
+</head>
+<body>
+  <nav class="sidebar">
+    <h1>AI EMS</h1>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="command-center.html">Command Center</a></li>
+      <li><a href="camera-detection.html">Camera &amp; Detection</a></li>
+      <li><a href="hospital-portal.html">Hospital Portal</a></li>
+      <li><a href="simulation-lab.html">Simulation Lab</a></li>
+      <li><a href="analytics.html">Analytics</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </nav>
+  <main class="content">
+    <h2>Simulation Lab</h2>
+    <section class="simulation-controls">
+      <label>
+        Number of Accidents:
+        <input type="number" id="num-accidents" min="1" max="20" value="5" />
+      </label>
+      <label>
+        Number of Ambulances:
+        <input type="number" id="num-ambulances" min="1" max="20" value="4" />
+      </label>
+      <label>
+        Duration (seconds):
+        <input type="number" id="duration" min="10" max="120" value="30" />
+      </label>
+      <label>
+        Strategy:
+        <select id="strategy">
+          <option value="nearest">Nearest</option>
+          <option value="round_robin">Round Robin</option>
+        </select>
+      </label>
+      <button id="start-sim">Start Simulation</button>
+    </section>
+    <section class="simulation-output">
+      <h3>Simulation Log</h3>
+      <div id="sim-log" class="log-output"></div>
+    </section>
+    <section class="simulation-map">
+      <h3>Map</h3>
+      <div id="sim-map" class="map-container"></div>
+    </section>
+  </main>
+  <script src="config.js"></script>
+  <script type="module" src="simulation-lab.js"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+/* styles.css – plain CSS for the vanilla UI */
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #111827; /* dark bg similar to theme */
+  color: #e5e7eb; /* gray-200 */
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #1f2937; /* gray-800 */
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+.sidebar h1 {
+  font-size: 1.2rem;
+  color: #60a5fa; /* sky-400 */
+  margin-bottom: 1rem;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+.sidebar li {
+  margin: 0.5rem 0;
+}
+.sidebar a {
+  color: #e5e7eb;
+  text-decoration: none;
+}
+.sidebar a:hover {
+  color: #60a5fa;
+}
+
+.content {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.kpi-card {
+  background-color: #374151; /* gray-700 */
+  padding: 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+}
+.kpi-card h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #d1d5db; /* gray-300 */
+}
+.kpi-card p {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.map-container {
+  height: 400px;
+  margin-bottom: 1rem;
+}
+
+.incident-feed {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #4b5563; /* gray-600 */
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+.incident-item {
+  padding: 0.3rem;
+  margin-bottom: 0.3rem;
+  border-radius: 3px;
+}
+
+/* Simple button style */
+.button {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background-color: #2563eb; /* blue-600 */
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+.button:hover {
+  background-color: #1d4ed8; /* blue-700 */
+}
+
+/* Chart container */
+.chart-container {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+}

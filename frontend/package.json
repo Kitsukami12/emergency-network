@@ -1,0 +1,30 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.22",
+    "@types/node": "^26.6.6",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.6"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.3.5",
+    "@tanstack/react-query": "^5.107.1",
+    "@types/react-router-dom": "^5.3.3",
+    "autoprefixer": "^10.6.2",
+    "axios": "^1.21.1",
+    "leaflet": "^1.9.4",
+    "postcss": "^8.5.33",
+    "react-leaflet": "^5.0.0",
+    "react-router-dom": "^6.30.6",
+    "recharts": "^3.10.1",
+    "tailwindcss": "^4.3.5"
+  }
+}

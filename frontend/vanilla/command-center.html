@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Command Center – AI Emergency Response Network</title>
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind custom config (extracted from Stitch design) -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-variant": "#273647",
+            "primary": "#8aebff",
+            "primary-container": "#22d3ee",
+            "primary-fixed": "#a2eeff",
+            "primary-fixed-dim": "#c1c5dc",
+            "secondary": "#bbc6e7",
+            "secondary-container": "#3b4662",
+            "secondary-fixed": "#bbc6e7",
+            "secondary-fixed-dim": "#c1c5dc",
+            "tertiary": "#d8dcf3",
+            "tertiary-container": "#bcc0d6",
+            "error": "#ffb4ab",
+            "error-container": "#93000a",
+            "background": "#051424",
+            "surface": "#051424",
+            "surface-container-low": "#0d1c2d",
+            "surface-container": "#122131",
+            "surface-container-high": "#1c2b3c",
+            "surface-container-highest": "#273647",
+            "surface-tint": "#2fd9f4",
+            "on-primary": "#00363e",
+            "on-primary-container": "#005763",
+            "on-surface": "#d4e4fa",
+            "on-surface-variant": "#bbc9cd",
+            "outline": "#859397",
+            "outline-variant": "#3c494c",
+            "inverse-primary": "#006877",
+            "inverse-surface": "#d4e4fa",
+            "inverse-on-surface": "#233143",
+            "on-error": "#690005",
+            "on-error-container": "#ffdad6",
+            "on-secondary": "#25304a",
+            "on-primary-fixed": "#001f25",
+            "on-primary-fixed-variant": "#004e5a",
+            "on-secondary-fixed": "#0f1b34",
+            "on-secondary-fixed-variant": "#3b4662",
+            "on-tertiary": "#161b2b",
+            "on-tertiary-fixed": "#414658",
+            "on-tertiary-fixed-variant": "#2b3041",
+            "on-tertiary-container": "#494e61",
+          },
+          borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" },
+          spacing: {
+            "margin": "1rem",
+            "gutter": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "0.75rem",
+            "space-lg": "1rem",
+            "space-xl": "1.5rem",
+          },
+          fontFamily: {
+            "body-sm": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-badge": ["JetBrains Mono"],
+            "mono-data-sm": ["JetBrains Mono"],
+            "title-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-xl": ["Inter"]
+          },
+          fontSize: {
+            "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }],
+            "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+            "headline-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+            "headline-lg": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+            "headline-xl": ["32px", { lineHeight: "40px", fontWeight: "700" }],
+            "label-badge": ["10px", { lineHeight: "12px", fontWeight: "700" }],
+            "mono-data-sm": ["11px", { lineHeight: "14px", fontWeight: "500" }],
+            "mono-data-md": ["13px", { lineHeight: "18px", fontWeight: "500" }],
+            "mono-data-lg": ["16px", { lineHeight: "20px", fontWeight: "600" }],
+            "title-sm": ["16px", { lineHeight: "24px", fontWeight: "600" }],
+          },
+        },
+      },
+    };
+  </script>
+  <!-- Leaflet CSS (needed for map) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-sA+e2kF+5zSxT6A2K+6n3QJ7uMzc+7uW2U8G2Z1w5JE=" crossorigin="" />
+  <!-- Preserve custom stylesheet for map overlays, etc. -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-background font-body-md text-on-surface selection:bg-primary-container selection:text-on-primary">
+  <!-- Sidebar (icon‑only) -->
+  <aside class="fixed left-0 top-0 h-full w-[72px] bg-surface-container-low z-50 flex flex-col justify-between py-space-md border-r border-surface-container-highest shadow-[0_1px_8px_rgba(0,0,0,0.5)]">
+    <aside class="flex flex-col items-center gap-space-lg w-full">
+      <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center border border-surface-container-high">
+        <span class="material-symbols-outlined text-primary text-[22px]">local_fire_department</span>
+      </div>
+      <nav class="flex flex-col items-center gap-space-xs w-full px-space-xs" data-active-classes="bg-surface-container-high text-primary border-l-2 border-primary-container shadow-[0_0_12px_rgba(34,211,238,0.25)]">
+        <a aria-current="page" class="group relative flex items-center justify-center w-12 h-12 rounded-lg transition-all bg-surface-container-high text-primary border-l-2 border-primary-container shadow-[0_0_12px_rgba(34,211,238,0.25)]" href="command-center.html" title="Command Center">
+          <span class="material-symbols-outlined text-[20px]">grid_view</span>
+        </a>
+        <a class="group relative flex items-center justify-center w-12 h-12 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" href="camera-detection.html" title="Camera &amp; Detection">
+          <span class="material-symbols-outlined text-[20px]">videocam</span>
+        </a>
+        <a class="group relative flex items-center justify-center w-12 h-12 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" href="hospital-portal.html" title="Hospital Portal">
+          <span class="material-symbols-outlined text-[20px]">local_hospital</span>
+        </a>
+        <a class="group relative flex items-center justify-center w-12 h-12 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" href="simulation-lab.html" title="Simulation Lab">
+          <span class="material-symbols-outlined text-[20px]">science</span>
+        </a>
+        <a class="group relative flex items-center justify-center w-12 h-12 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" href="analytics.html" title="Analytics">
+          <span class="material-symbols-outlined text-[20px]">monitoring</span>
+        </a>
+        <a class="group relative flex items-center justify-center w-12 h-12 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" href="about.html" title="About &amp; Limitations">
+          <span class="material-symbols-outlined text-[20px]">info</span>
+        </a>
+      </nav>
+    </div>
+    <div class="flex flex-col items-center gap-space-sm w-full px-space-xs border-t border-surface-container-high pt-space-md">
+      <button class="flex items-center justify-center w-10 h-10 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" title="System Diagnostics" type="button">
+        <span class="material-symbols-outlined text-[18px]">tune</span>
+      </button>
+      <button class="flex items-center justify-center w-10 h-10 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" title="Audio Alerts Matrix" type="button">
+        <span class="material-symbols-outlined text-[18px]">volume_up</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="pl-[72px]">
+    <!-- Header bar -->
+    <header class="fixed top-0 left-[72px] right-0 z-40 bg-surface/90 backdrop-blur-xl border-b border-surface-container-highest">
+      <div class="h-16 w-full px-gutter flex items-center justify-between gap-space-md">
+        <div class="flex items-center gap-space-md min-w-0">
+          <div class="flex flex-col min-w-0">
+            <div class="flex items-center gap-space-xs">
+              <span class="font-title-sm text-title-sm text-on-surface uppercase tracking-wider font-semibold truncate">AI Emergency Response Network</span>
+            </div>
+            <span class="font-mono-data-sm text-mono-data-sm text-outline tracking-wider uppercase">INDORE METRO • SECTOR 4</span>
+          </div>
+        </div>
+        <div class="hidden xl:flex items-center gap-space-md">
+          <div class="flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-low border border-surface-container-high">
+            <span class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_8px_rgba(34,211,238,0.8)]"></span>
+            <span class="font-label-badge text-label-badge text-primary-fixed uppercase tracking-wider">LIVE • CCTV MESH ACTIVE</span>
+          </div>
+          <div class="px-space-md py-space-xs rounded-full border border-primary-container bg-surface-container">
+            <span class="font-label-badge text-label-badge text-primary-fixed-dim uppercase tracking-wider font-bold">Decision-support prototype</span>
+          </div>
+          <div class="flex items-center gap-space-xs px-space-md py-space-xs rounded-lg bg-surface-container-lowest border border-surface-container-high">
+            <span class="material-symbols-outlined text-outline text-[16px]">schedule</span>
+            <span class="font-mono-data-md text-mono-data-md text-primary tracking-widest font-bold" id="clock">--:--:--</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-space-md shrink-0">
+          <div class="hidden sm:flex flex-col text-right">
+            <span class="font-body-sm text-body-sm text-on-surface font-semibold leading-tight">A. Sharma (Lead Dispatcher)</span>
+            <span class="font-mono-data-sm text-mono-data-sm text-primary-container font-medium tracking-wide uppercase">ON DUTY</span>
+          </div>
+          <img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-primary/40" src="assets/avatar.svg" />
+        </div>
+      </div>
+    </header>
+
+    <main class="w-full pt-16 bg-background min-h-screen">
+      <!-- Alert banner (example) -->
+      <div id="alert-banner" class="w-full bg-error-container/20 border border-error-container/40 rounded-xl px-4 py-2.5 flex items-center justify-between transition-all mb-4 hidden">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-error-container/30 flex items-center justify-center text-error animate-pulse shrink-0">
+            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="font-mono-data-sm text-mono-data-sm text-error font-bold tracking-wide uppercase">NO AVAILABLE AMBULANCE:</span>
+            <span class="font-body-md text-body-md text-on-surface font-medium">1 accident queued awaiting dispatch assignment in Sector 4</span>
+          </div>
+        </div>
+        <button onclick="document.getElementById('alert-banner').remove()" class="w-7 h-7 rounded-lg hover:bg-surface-container flex items-center justify-center text-outline hover:text-on-surface transition-colors" title="Dismiss Alert">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <!-- KPI bar (6 cards) -->
+      <div id="kpi-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-space-sm w-full mb-4">
+        <!-- Active Accidents -->
+        <div class="bg-surface-container-low p-space-sm rounded-xl flex items-center justify-between shadow-sm relative overflow-hidden border border-surface-container-high">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-error shadow-[0_0_8px_rgba(255,180,171,0.8)]"></div>
+          <div class="flex flex-col min-w-0 pl-space-xs">
+            <span class="font-mono-data-sm text-mono-data-sm text-on-surface-variant uppercase tracking-wider truncate">Active Accidents</span>
+            <div class="flex items-baseline gap-space-xs mt-0.5">
+              <span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight" id="kpi-active-accidents">0</span>
+              <span class="font-mono-data-sm text-mono-data-sm text-error font-semibold" id="kpi-active-accidents-sev"></span>
+            </div>
+          </div>
+          <div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-error shrink-0">
+            <span class="material-symbols-outlined text-[18px]">car_crash</span>
+          </div>
+        </div>
+        <!-- Ambulances Available -->
+        <div class="bg-surface-container-low p-space-sm rounded-xl flex items-center justify-between shadow-sm relative overflow-hidden border border-surface-container-high">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary-container"></div>
+          <div class="flex flex-col min-w-0 pl-space-xs">
+            <span class="font-mono-data-sm text-mono-data-sm text-on-surface-variant uppercase tracking-wider truncate">Ambulances Avail.</span>
+            <div class="flex items-baseline gap-space-xs mt-0.5">
+              <span class="font-headline-lg text-headline-lg text-primary-container font-bold" id="kpi-ambulances-avail">0</span>
+              <span class="font-mono-data-sm text-mono-data-sm text-outline" id="kpi-ambulances-total">/ 0</span>
+            </div>
+          </div>
+          <div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary-container shrink-0">
+            <span class="material-symbols-outlined text-[18px]">ambulance</span>
+          </div>
+        </div>
+        <!-- Dispatched -->
+        <div class="bg-surface-container-low p-space-sm rounded-xl flex items-center justify-between shadow-sm relative overflow-hidden border border-surface-container-high">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+          <div class="flex flex-col min-w-0 pl-space-xs">
+            <span class="font-mono-data-sm text-mono-data-sm text-on-surface-variant uppercase tracking-wider truncate">Dispatched</span>
+            <div class="flex items-baseline gap-space-xs mt-0.5">
+              <span class="font-headline-lg text-headline-lg text-primary font-bold" id="kpi-dispatched">0</span>
+              <span class="font-mono-data-sm text-mono-data-sm text-outline" id="kpi-dispatched-label">EN ROUTE</span>
+            </div>
+          </div>
+          <div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+            <span class="material-symbols-outlined text-[18px]">near_me</span>
+          </div>
+        </div>
+        <!-- At Scene / Transporting -->
+        <div class="bg-surface-container-low p-space-sm rounded-xl flex items-center justify-between shadow-sm relative overflow-hidden border border-surface-container-high">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary-fixed"></div>
+          <div class="flex flex-col min-w-0 pl-space-xs">
+            <span class="font-mono-data-sm text-mono-data-sm text-on-surface-variant uppercase tracking-wider truncate">At Scene / Trans.</span>
+            <div class="flex items-baseline gap-space-xs mt-0.5">
+              <span class="font-headline-lg text-headline-lg text-secondary-fixed font-bold" id="kpi-at-scene">0</span>
+              <span class="font-mono-data-sm text-mono-data-sm text-outline" id="kpi-at-scene-label">ACTIVE</span>
+            </div>
+          </div>
+          <div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-secondary-fixed shrink-0">
+            <span class="material-symbols-outlined text-[18px]">local_hospital</span>
+          </div>
+        </div>
+        <!-- Avg Response Time -->
+        <div class="bg-surface-container-low p-space-sm rounded-xl flex items-center justify-between shadow-sm relative overflow-hidden border border-surface-container-high">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-surface-tint"></div>
+          <div class="flex flex-col min-w-0 pl-space-xs">
+            <span class="font-mono-data-sm text-mono-data-sm text-on-surface-variant uppercase tracking-wider truncate">Avg Response Time</span>
+            <div class="flex items-baseline gap-space-xs mt-0.5">
+              <span class="font-mono-data-lg text-mono-data-lg text-primary font-bold" id="kpi-avg-rt">--:--</span>
+              <span class="font-label-badge text-label-badge text-surface-tint uppercase" id="kpi-avg-rt-diff"></span>
+            </div>
+          </div>
+          <div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-surface-tint shrink-0">
+            <span class="material-symbols-outlined text-[18px]">timer</span>
+          </div>
+        </div>
+        <!-- Awaiting Ambulance (warning) -->
+        <div class="bg-surface-container-low p-space-sm rounded-xl flex items-center justify-between shadow-sm relative overflow-hidden border border-error/40">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-error animate-pulse shadow-[0_0_8px_rgba(255,180,171,0.8)]"></div>
+          <div class="flex flex-col min-w-0 pl-space-xs">
+            <div class="flex items-center gap-1">
+              <span class="font-mono-data-sm text-mono-data-sm text-on-surface-variant uppercase tracking-wider truncate">Awaiting Amb.</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>
+            </div>
+            <div class="flex items-baseline gap-space-xs mt-0.5">
+              <span class="font-headline-lg text-headline-lg text-error font-bold" id="kpi-awaiting">0</span>
+              <span class="px-1.5 py-0.2 rounded bg-error-container/40 text-error font-label-badge text-label-badge uppercase font-bold animate-pulse" id="kpi-awaiting-status">QUEUED</span>
+            </div>
+          </div>
+          <div class="w-8 h-8 rounded-lg bg-error-container/20 flex items-center justify-center text-error shrink-0">
+            <span class="material-symbols-outlined text-[18px]">priority_high</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main workspace: map + incident feed -->
+      <div class="flex flex-col lg:flex-row gap-space-md w-full flex-1 items-start min-h-0">
+        <!-- Tactical dark map -->
+        <div class="flex-1 w-full bg-surface-container-lowest rounded-xl border border-surface-container-high overflow-hidden shadow-2xl relative flex flex-col h-[740px]">
+          <!-- Map header & telemetry strip -->
+          <div class="relative z-20 px-space-md py-space-sm bg-surface-container-low/95 backdrop-blur-md border-b border-surface-container-high flex flex-wrap items-center justify-between gap-space-sm">
+            <div class="flex items-center gap-space-sm">
+              <div class="w-7 h-7 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-[18px]">map</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="font-title-sm text-title-sm text-on-surface font-bold tracking-wide">Indore Tactical Geo-Grid</span>
+                <span class="font-mono-data-sm text-mono-data-sm px-2 py-0.5 rounded bg-surface-container-high text-outline">CARTO-DARK MESH</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-space-sm font-mono-data-sm text-mono-data-sm text-outline">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-primary-container"></span>
+                <span>Green: Available (7)</span>
+              </div>
+              <div class="flex items-center gap-1.5 ml-2">
+                <span class="w-2 h-2 rounded-full bg-primary"></span>
+                <span>Cyan: Dispatched (3)</span>
+              </div>
+              <div class="flex items-center gap-1.5 ml-2">
+                <span class="w-2 h-2 rounded-full bg-secondary-fixed"></span>
+                <span>Orange: At Scene (2)</span>
+              </div>
+            </div>
+          </div>
+          <!-- Leaflet map container (SVG overlay will be injected via JS) -->
+          <div id="map" class="relative flex-1 w-full h-full overflow-hidden bg-[#070e17]"></div>
+        </div>
+        <!-- Incident feed (fixed width) -->
+        <aside class="w-[380px] overflow-y-auto border-l border-surface-container-high">
+          <h3 class="font-headline-md text-headline-md text-on-surface mb-2">Incident Feed</h3>
+          <div id="incident-feed" class="space-y-2 p-2"></div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="config.js"></script>
+  
+  <script src="api.js"></script>
+  <script type="module" src="command-center.js"></script>
+  <script>
+    // Simple clock updater
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
