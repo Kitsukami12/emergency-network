@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime, timedelta, timezone
 import secrets
 import base64
 
@@ -11,7 +12,11 @@ from dotenv import load_dotenv
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException
+import asyncio
+import threading
+from time import perf_counter
+
+from fastapi import BackgroundTasks, FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -26,7 +31,21 @@ from app.services.dispatch import STRATEGIES, dispatch_pending
 from app.services.notify import notify_nearest
 from app.services.routing import road_type_at
 from app.services.traffic import best_route
-from app.services.weather import get_weather
+from app.services.weather import get_weather as _get_weather
+import time as _time
+_WX = {}
+
+
+def get_weather(lat, lon):
+    """Weather barely changes in minutes: cache per ~1 km cell for 10 minutes."""
+    key = (round(lat, 2), round(lon, 2))
+    hit = _WX.get(key)
+    if hit and _time.time() - hit[0] < 600:
+        return hit[1]
+    val = _get_weather(lat, lon)
+    if val is not None:
+        _WX[key] = (_time.time(), val)
+    return val
 
 load_dotenv()
 
@@ -41,7 +60,11 @@ async def lifespan(app: FastAPI):
     db.init_db()
     db.seed_ambulances(load_ambulances(AMBULANCE_SEED))
     db.seed_hospitals(json.loads(HOSPITALS_SEED.read_text()))
+    threading.Thread(target=_warm_up, daemon=True).start()
+    task = asyncio.create_task(_batch_loop()) if BATCH_S > 0 else None
     yield
+    if task:
+        task.cancel()
 
 
 app = FastAPI(title="AI Emergency Response Network", lifespan=lifespan)
@@ -83,9 +106,88 @@ class NotificationStatus(BaseModel):
     status: str
 
 
+DEDUPE_MINUTES = 10
+
+
+def _recent_camera_incident(camera_id):
+    """Unresolved incident from this camera in the last DEDUPE_MINUTES, or None."""
+    cutoff = (datetime.now(timezone.utc) - timedelta(minutes=DEDUPE_MINUTES)
+              ).strftime("%Y-%m-%dT%H:%M:%S")
+    with db.connect() as conn:
+        row = conn.execute(
+            "SELECT accident_id FROM accidents WHERE camera_id = ? AND status != 'RESOLVED' "
+            "AND substr(reported_at, 1, 19) >= ? ORDER BY reported_at DESC LIMIT 1",
+            (camera_id, cutoff)).fetchone()
+    return db.get_accident(row["accident_id"]) if row else None
+
+
+@app.post("/demo/reset")
+def demo_reset():
+    """Demo control: clear all incidents and notifications, free every ambulance."""
+    with db.connect() as conn:
+        conn.execute("DELETE FROM notifications")
+        conn.execute("DELETE FROM accidents")
+        conn.execute("UPDATE ambulances SET status = ?", (AmbulanceStatus.AVAILABLE.value,))
+        conn.commit()
+    return {"status": "reset"}
+
+
+_dispatch_lock = threading.Lock()     # one notify/dispatch at a time, so no double assignment
+BATCH_S = float(os.getenv("DISPATCH_BATCH_S", "0"))   # 0 = dispatch right after each incident
+
+
+def _warm_up():
+    """Load the road graph and the per-ambulance travel-time caches before the first click."""
+    try:
+        from app.services.assignment import times_from
+        from app.services.routing import snap_to_node
+        t = perf_counter()
+        road_type_at(22.72, 75.86)
+        for a in db.list_ambulances():
+            times_from(snap_to_node(a.location.lat, a.location.lon))
+        print(f"warm-up done in {perf_counter() - t:.1f}s")
+    except Exception as e:
+        print("warm-up failed:", e)
+
+
+def _notify_and_dispatch(accident):
+    with _dispatch_lock:
+        t = perf_counter()
+        try:
+            notify_nearest(accident)
+        except Exception as e:
+            print("notification failed:", e)
+        t_notify = perf_counter() - t
+        t = perf_counter()
+        if BATCH_S <= 0:
+            try:
+                dispatch_pending("hungarian")
+            except Exception as e:
+                print("dispatch failed:", e)
+        print(f"timing {accident.accident_id}: notify {t_notify:.2f}s, "
+              f"dispatch {perf_counter() - t:.2f}s")
+
+
+async def _batch_loop():
+    def run():
+        with _dispatch_lock:
+            try:
+                dispatch_pending("hungarian")
+            except Exception as e:
+                print("dispatch failed:", e)
+    while True:
+        await asyncio.sleep(BATCH_S)
+        await asyncio.to_thread(run)
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/", include_in_schema=False)
+def home_page():
+    return FileResponse(ROOT / "dashboard" / "home.html")
 
 
 @app.get("/map", include_in_schema=False)
@@ -114,20 +216,22 @@ def get_accidents():
 
 
 @app.post("/accidents", response_model=Accident, status_code=201)
-def report_accident(report: AccidentReport, x_api_key: str | None = Header(default=None)):
+def report_accident(report: AccidentReport, background: BackgroundTasks,
+                    x_api_key: str | None = Header(default=None)):
     if report.source == "camera" and AGENT_KEY and not secrets.compare_digest(
             x_api_key or "", AGENT_KEY):
         raise HTTPException(401, "invalid or missing API key")
     loc = report.location
     if not (LAT_MIN <= loc.lat <= LAT_MAX and LON_MIN <= loc.lon <= LON_MAX):
         raise HTTPException(422, "Location is outside the Indore map area")
+    if report.source == "camera" and report.camera_id:
+        existing = _recent_camera_incident(report.camera_id)
+        if existing:                       # same camera, same ongoing incident: do not duplicate
+            return existing
     weather = get_weather(loc.lat, loc.lon)
     road = road_type_at(loc.lat, loc.lon)
     accident = db.add_accident(report, weather=weather, road_type=road)
-    try:
-        notify_nearest(accident)        # a notification failure must never block the incident
-    except Exception as e:
-        print("notification failed:", e)
+    background.add_task(_notify_and_dispatch, accident)   # runs after the response is sent
     return accident
 
 
@@ -179,7 +283,8 @@ def get_route(from_lat: float, from_lon: float, to_lat: float, to_lon: float):
 def dispatch(strategy: str = "hungarian"):
     if strategy not in STRATEGIES:
         raise HTTPException(400, f"strategy must be one of {list(STRATEGIES)}")
-    return dispatch_pending(strategy)
+    with _dispatch_lock:
+        return dispatch_pending(strategy)
 
 
 @app.get("/notifications")
