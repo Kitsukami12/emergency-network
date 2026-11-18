@@ -8,24 +8,14 @@ import { colors } from '../theme';
 
 export default function HospitalPortal() {
   const queryClient = useQueryClient();
-  const { data: hospitals = [], isLoading: hLoading } = useQuery(['hospitals'], fetchHospitals);
+  const { data: hospitals = [], isLoading: hLoading } = useQuery({ queryKey: ['hospitals'], queryFn: fetchHospitals });
   const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
 
-  const { data: notifications = [], isLoading: nLoading } = useQuery(
-    ['notifications', selectedHospital],
-    () => fetchNotifications(selectedHospital ?? undefined),
-    { enabled: !!selectedHospital },
-  );
+  const { data: notifications = [], isLoading: nLoading } = useQuery({ queryKey: ['notifications', selectedHospital], queryFn: () => fetchNotifications(selectedHospital ?? undefined), enabled: !!selectedHospital });
 
-  const ackMutation = useMutation(
-    ({ id }: { id: string }) => updateNotificationStatus(id, 'ACKNOWLEDGED'),
-    { onSuccess: () => queryClient.invalidateQueries(['notifications']) },
-  );
+  const ackMutation = useMutation({ mutationFn: ({ id }: { id: string }) => updateNotificationStatus(id, 'ACKNOWLEDGED'), onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notifications'] }) });
 
-  const acceptMutation = useMutation(
-    ({ id }: { id: string }) => updateNotificationStatus(id, 'ACCEPTED'),
-    { onSuccess: () => queryClient.invalidateQueries(['notifications']) },
-  );
+  const acceptMutation = useMutation({ mutationFn: ({ id }: { id: string }) => updateNotificationStatus(id, 'ACCEPTED'), onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notifications'] }) });
 
   const statusColor = (severity: Severity) => {
     switch (severity) {

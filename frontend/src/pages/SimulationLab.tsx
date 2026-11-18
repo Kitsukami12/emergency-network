@@ -7,15 +7,19 @@ import { Ambulance, Accident, Location } from '../api/types';
 import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import BaseMap from '../components/BaseMap';
+import icon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import icon1x from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { colors } from '../theme';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 // Fix Leaflet icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+  iconRetinaUrl: icon2x,
+  iconUrl: icon1x,
+  shadowUrl: iconShadow,
 });
 
 export default function SimulationLab() {
@@ -27,11 +31,15 @@ export default function SimulationLab() {
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const queryClient = useQueryClient();
 
-  const { data: ambulances = [] } = useQuery(['ambulances'], fetchAmbulances);
-  const { data: accidents = [] } = useQuery(['accidents'], fetchAccidents);
+  const { data: ambulances = [] } = useQuery({ queryKey: ['ambulances'], queryFn: fetchAmbulances });
+  const { data: accidents = [] } = useQuery({ queryKey: ['accidents'], queryFn: fetchAccidents });
 
-  const dispatchMutation = useMutation(() => dispatch(strategy), {
-    onSuccess: () => queryClient.invalidateQueries(['accidents', 'ambulances']),
+  const dispatchMutation = useMutation({
+    mutationFn: () => dispatch(strategy),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['accidents'] });
+      queryClient.invalidateQueries({ queryKey: ['ambulances'] });
+    },
   });
 
   const handleStart = () => {
@@ -71,9 +79,9 @@ export default function SimulationLab() {
             <button
               className="mt-2 px-4 py-2 rounded bg-accent text-black disabled:opacity-50"
               onClick={handleStart}
-              disabled={dispatchMutation.isLoading}
+              disabled={dispatchMutation.isPending}
             >
-              {dispatchMutation.isLoading ? 'Running…' : 'Start Simulation'}
+              {dispatchMutation.isPending ? 'Running…' : 'Start Simulation'}
             </button>
           </div>
         </section>
@@ -94,12 +102,8 @@ export default function SimulationLab() {
 
       {/* Map playback – show current ambulances and accidents */}
       <div className="h-96 rounded bg-panel border border-border overflow-hidden">
-        // @ts-ignore
       <MapContainer center={[center.lat, center.lon]} zoom={13} style={{ height: '100%', width: '100%' }}>
-          <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-            attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-          />
+          <BaseMap />
           {ambulances.map((a) => (
             <Marker key={a.ambulance_id} position={[a.location.lat, a.location.lon]} />
           ))}

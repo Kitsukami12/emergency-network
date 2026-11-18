@@ -23,6 +23,31 @@ export const api = axios.create({
   },
 });
 
+api.interceptors.request.use((cfg) => {
+  const pin = localStorage.getItem('emergency_pin');
+  if (pin) (cfg.headers as any).Authorization = 'Basic ' + btoa('operator:' + pin);
+  return cfg;
+});
+
+// The backend returns flat lat/lon for hospitals, a [lat, lon] "route" list, and notification
+// details inside "payload". The UI expects the shapes in types.ts, so convert here.
+const adaptHospital = (h: any): Hospital => ({ ...h, location: h.location ?? { lat: h.lat, lon: h.lon } });
+const adaptRoute = (r: any): RouteResult => ({
+  ...r,
+  coordinates: r.coordinates ?? (r.route ?? []).map(([lat, lon]: number[]) => ({ lat, lon })),
+});
+const adaptNotification = (n: any): Notification => {
+  const p = n.payload ?? {};
+  return {
+    ...p,
+    ...n,
+    severity: n.severity ?? p.severity_estimate ?? 'MEDIUM',
+    status: n.status === 'NEW' ? 'PENDING' : n.status,
+    vehicles: n.vehicles ?? (p.vehicles_involved != null ? String(p.vehicles_involved) : undefined),
+    casualties: n.casualties ?? (p.people_in_scene != null ? String(p.people_in_scene) : undefined),
+  };
+};
+
 export const severityColorMap = mock.severityColorMap;
 export const ambulanceStatusColorMap = mock.ambulanceStatusColorMap;
 
@@ -54,8 +79,8 @@ export const fetchAmbulances = async (): Promise<Ambulance[]> => {
 export const fetchHospitals = async (): Promise<Hospital[]> => {
   if (isMock) return mock.fetchHospitals();
   try {
-    const res = await api.get<Hospital[]>('/hospitals');
-    return res.data;
+    const res = await api.get<any[]>('/hospitals');
+    return res.data.map(adaptHospital);
   } catch (err) {
     console.warn('Real backend /hospitals failed, falling back to mock:', err);
     return mock.fetchHospitals();
@@ -69,7 +94,7 @@ export const fetchNotifications = async (hospitalId?: string): Promise<Notificat
     const res = await api.get<Notification[]>('/notifications', {
       params: { hospital_id: hospitalId },
     });
-    return res.data;
+    return (res.data as any[]).map(adaptNotification);
   } catch (err) {
     console.warn('Real backend /notifications failed, falling back to mock:', err);
     return mock.fetchNotifications(hospitalId);
@@ -88,7 +113,7 @@ export const fetchRoute = async (from: Location, to: Location): Promise<RouteRes
         to_lon: to.lon,
       },
     });
-    return res.data;
+    return adaptRoute(res.data);
   } catch (err) {
     console.warn('Real backend /route failed, falling back to mock:', err);
     return mock.fetchRoute(from, to);

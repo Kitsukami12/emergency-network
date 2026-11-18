@@ -8,8 +8,8 @@ import { colors } from '../theme';
 import { Severity } from '../api/types';
 
 export default function Analytics() {
-  const { data: accidents = [], isLoading: aLoading } = useQuery(['accidents'], fetchAccidents);
-  const { data: hospitals = [], isLoading: hLoading } = useQuery(['hospitals'], fetchHospitals);
+  const { data: accidents = [], isLoading: aLoading } = useQuery({ queryKey: ['accidents'], queryFn: fetchAccidents });
+  const { data: hospitals = [], isLoading: hLoading } = useQuery({ queryKey: ['hospitals'], queryFn: fetchHospitals });
 
   // Aggregations
   const severityCounts = accidents.reduce<Record<Severity, number>>((acc, cur) => {

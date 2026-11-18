@@ -1,164 +1,340 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AI Emergency Response Network</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-  :root { --bg:#0b171d; --panel:#12242d; --line:#20404d; --text:#e6f0f3; --mute:#88a3ae;
-          --accent:#38bdf8; --green:#22c55e; --amber:#f59e0b; }
-  * { box-sizing: border-box; }
-  body { margin:0; height:100vh; display:flex; flex-direction:column;
-         background:var(--bg); color:var(--text); font-family:system-ui,sans-serif; }
-  header { display:flex; align-items:center; gap:14px; padding:10px 18px;
-           background:var(--panel); border-bottom:1px solid var(--line); }
-  header h1 { font-size:17px; margin:0; font-weight:650; }
-  .badge { font-size:11px; padding:3px 8px; border-radius:999px;
-           border:1px solid var(--amber); color:var(--amber); }
-  .spacer { flex:1; }
-  select, button { background:#0d1d25; color:var(--text); border:1px solid var(--line);
-                   border-radius:6px; padding:7px 10px; font-size:13px; }
-  button { cursor:pointer; } button:hover { border-color:var(--accent); }
-  button.primary { background:var(--accent); color:#04222f; border-color:var(--accent); font-weight:650; }
-  #kpis { display:flex; gap:12px; padding:12px 18px; }
-  .kpi { flex:1; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 14px; }
-  .kpi .n { font-size:26px; font-weight:700; } .kpi .l { font-size:12px; color:var(--mute); }
-  main { flex:1; display:flex; gap:12px; padding:0 18px 14px; min-height:0; }
-  #map { flex:1; border-radius:10px; border:1px solid var(--line); }
-  aside { width:340px; background:var(--panel); border:1px solid var(--line);
-          border-radius:10px; display:flex; flex-direction:column; min-height:0; }
-  aside h2 { margin:0; padding:12px 14px; font-size:13px; color:var(--mute);
-             text-transform:uppercase; letter-spacing:.06em; border-bottom:1px solid var(--line); }
-  #list { overflow-y:auto; flex:1; }
-  .item { padding:10px 14px; border-bottom:1px solid var(--line); cursor:pointer; }
-  .item:hover { background:#173039; }
-  .sev { font-size:11px; font-weight:700; padding:2px 7px; border-radius:4px; color:#111; margin-right:6px; }
-  .sub { font-size:12px; color:var(--mute); margin-top:4px; display:flex; justify-content:space-between; align-items:center; }
-  .item button { padding:3px 8px; font-size:11px; }
-  #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--panel);
-           border:1px solid var(--accent); padding:10px 16px; border-radius:8px; display:none; }
-  .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9); }
+:root{--bg:#0e1116;--panel:#161b22;--line:#262d38;--text:#e6edf3;--mut:#8b96a5;--blue:#4c9aff;
+--crit:#ff3b4e;--high:#ff8a3d;--med:#f5c542;--low:#4cc38a}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--text);font:14px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:16px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel);flex-wrap:wrap}
+h1{font-size:16px;margin:0;font-weight:600;white-space:nowrap}
+.kpis{display:flex;gap:10px;flex:1;flex-wrap:wrap}
+.kpi{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 12px;min-width:96px}
+.kpi b{display:block;font-size:20px;line-height:1.2}
+.kpi span{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+main{flex:1;position:relative;min-height:0}
+#map{position:absolute;top:0;left:0;bottom:0;right:390px;background:#0b0d11}
+#dbg{position:absolute;top:8px;left:56px;z-index:1000;font-size:11px;color:#c9d1d9;background:rgba(14,17,22,.85);padding:3px 8px;border-radius:4px}
+aside{position:absolute;top:0;right:0;bottom:0;width:390px;border-left:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column;min-height:0}
+.controls{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button,select{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:6px 10px;font:inherit;cursor:pointer}
+button:hover{border-color:var(--blue)}
+button.primary{background:var(--blue);border-color:var(--blue);color:#06101f;font-weight:600}
+label.chk{color:var(--mut);font-size:12px;display:flex;gap:6px;align-items:center}
+#list{flex:1;overflow:auto;padding:8px}
+.card{border:1px solid var(--line);border-left:4px solid var(--mut);border-radius:8px;padding:8px 10px;margin-bottom:8px;cursor:pointer;background:var(--bg)}
+.card:hover,.card.sel{border-color:var(--blue)}
+.card.done{opacity:.55}
+.row{display:flex;justify-content:space-between;gap:8px}
+.tag{font-size:11px;font-weight:700;letter-spacing:.04em}
+.mut{color:var(--mut);font-size:12px}
+#detail{border-top:1px solid var(--line);padding:12px;max-height:46%;overflow:auto}
+#detail h3{margin:0 0 6px;font-size:14px}
+#detail dl{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:8px 0}
+#detail dt{color:var(--mut)}#detail dd{margin:0}
+#detail img{width:100%;border-radius:6px;margin-top:6px;border:1px solid var(--line)}
+.empty{color:var(--mut);text-align:center;padding:24px 8px}
+footer{padding:8px 12px;border-top:1px solid var(--line);color:var(--mut);font-size:11px}
+#err{background:#4a1118;color:#ffb3bb;padding:6px 16px;font-size:13px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--blue);padding:10px 16px;border-radius:8px;z-index:9999;display:none;max-width:80vw}
+.inc{width:22px;height:22px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 0 currentColor}
+.inc.pulse{animation:pulse 1.6s infinite}
+.inc.sel{outline:3px solid #fff;outline-offset:2px}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,59,78,.7)}100%{box-shadow:0 0 0 18px rgba(255,59,78,0)}}
+.legend{background:var(--panel);color:var(--text);padding:8px 10px;border-radius:8px;border:1px solid var(--line);font-size:12px;line-height:1.7}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+@media(max-width:800px){#map{right:0;bottom:55%}aside{width:100%;top:45%;border-left:0}}
 </style>
 </head>
 <body>
 <header>
-  <h1>AI Emergency Response Network</h1>
-  <span class="badge">Decision-support prototype</span>
-  <span class="spacer"></span>
-  <label style="font-size:12px;color:var(--mute)">Click-to-report severity</label>
-  <select id="sev"><option>LOW</option><option>MEDIUM</option><option selected>HIGH</option><option>CRITICAL</option></select>
-  <label style="font-size:12px;color:var(--mute)">Strategy</label>
-  <select id="strategy"><option value="hungarian">Hungarian (optimized)</option><option value="nearest">Nearest (baseline)</option></select>
-  <button class="primary" onclick="dispatch()">Dispatch</button>
+  <h1>🚨 AI Emergency Response Network</h1>
+  <div class="kpis" id="kpis"></div>
 </header>
-
-<section id="kpis">
-  <div class="kpi"><div class="n" id="k-active">0</div><div class="l">Active emergencies</div></div>
-  <div class="kpi"><div class="n" id="k-wait">0</div><div class="l">Awaiting ambulance</div></div>
-  <div class="kpi"><div class="n" id="k-disp">0</div><div class="l">Ambulances dispatched</div></div>
-  <div class="kpi"><div class="n" id="k-free">0</div><div class="l">Ambulances available</div></div>
-</section>
-
+<div id="err" hidden></div>
 <main>
   <div id="map"></div>
-  <aside><h2>Incidents</h2><div id="list"></div></aside>
+  <div id="dbg">starting…</div>
+  <aside>
+    <div class="controls">
+      <select id="strategy"><option value="hungarian">Hungarian</option><option value="nearest">Nearest</option></select>
+      <button class="primary" id="btnDispatch">Dispatch pending</button>
+      <button id="btnSim">+ Simulate accident</button>
+      <button id="btnReset">Reset demo</button>
+      <label class="chk"><input type="checkbox" id="auto"> auto-dispatch (20 s batches)</label>
+    </div>
+    <div id="list"></div>
+    <div id="detail"><div class="empty">Select an incident to see details.</div></div>
+    <footer>Decision-support prototype. Severity is a rule-based incident estimate, not a medical assessment. ETAs are estimates; ambulance positions are simulated.</footer>
+  </aside>
 </main>
 <div id="toast"></div>
-
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const SEV = { LOW:'#eab308', MEDIUM:'#f97316', HIGH:'#ef4444', CRITICAL:'#b91c1c' };
-const AMB = { AVAILABLE:'#22c55e', DISPATCHED:'#f59e0b' };
-const DONE = ['RESOLVED', 'CANCELLED'];
+const SEV = {CRITICAL:0, HIGH:1, MEDIUM:2, LOW:3};
+const COL = {CRITICAL:'#ff3b4e', HIGH:'#ff8a3d', MEDIUM:'#f5c542', LOW:'#4cc38a'};
+const STAT = {DETECTED:'Detected', ASSESSING:'Assessing', AWAITING_AMBULANCE:'Awaiting ambulance',
+  AMBULANCE_ASSIGNED:'Ambulance assigned', EN_ROUTE:'En route', ARRIVED:'Arrived', RESOLVED:'Resolved'};
+const NEXT = {AMBULANCE_ASSIGNED:'EN_ROUTE', EN_ROUTE:'ARRIVED', ARRIVED:'RESOLVED'};
+const AMB_COL = {AVAILABLE:'#4cc38a', DISPATCHED:'#4c9aff', EN_ROUTE:'#4c9aff', AT_SCENE:'#ff8a3d'};
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let accs = [], ambs = [], hosp = [], sel = null;
+const routes = {};              // key -> {pts, info}
+const mInc = new Map(), mAmb = new Map(), mRoute = new Map();
 
-const map = L.map('map').setView([22.7196, 75.8577], 12);
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-  { attribution: '&copy; OpenStreetMap', maxZoom: 19 }).addTo(map);
-  
-const markers = L.layerGroup().addTo(map);
-const routeLayer = L.layerGroup().addTo(map);
-const routeCache = {};   // accident_id -> route (fetched once)
-
+async function api(path, opt) {
+  const r = await fetch(path, opt);
+  if (!r.ok) throw new Error(path + ' → ' + r.status + ' ' + (await r.text()).slice(0, 120));
+  return r.json();
+}
 function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.style.display = 'block';
-  setTimeout(() => t.style.display = 'none', 2500);
+  const t = $('toast'); t.textContent = msg; t.style.display = 'block';
+  clearTimeout(toast.h); toast.h = setTimeout(() => t.style.display = 'none', 4000);
+}
+const ll = o => o.location ? [o.location.lat, o.location.lon]
+  : [o.lat ?? o.latitude, o.lon ?? o.lng ?? o.longitude];
+function ago(iso) {
+  if (!iso) return '';
+  const s = Math.max(0, (Date.now() - new Date(iso)) / 1000);
+  return s < 60 ? Math.round(s) + ' s ago' : s < 3600 ? Math.round(s / 60) + ' min ago' : Math.round(s / 3600) + ' h ago';
+}
+const sevColor = s => COL[s] || '#8b96a5';
+
+// ---------- map ----------
+const map = L.map('map', {zoomControl: true}).setView([22.72, 75.86], 12);
+const dbg = {ok: 0, bad: 0};
+function showDbg() {
+  const z = map.getSize();
+  $('dbg').textContent = `map ${z.x}×${z.y} · tiles ${dbg.ok} ok / ${dbg.bad} failed · on map: ${mInc.size} incidents, ${mAmb.size} ambulances`;
+}
+const dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  {attribution: '© OpenStreetMap, © CARTO', maxZoom: 19}).addTo(map);
+let tileFails = 0;
+dark.on('tileload', () => dbg.ok++);
+dark.on('tileerror', () => {
+  dbg.bad++;
+  if (++tileFails === 5) {                       // dark tiles blocked: fall back to plain OpenStreetMap
+    map.removeLayer(dark);
+    const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {attribution: '© OpenStreetMap', maxZoom: 19}).addTo(map);
+    let f2 = 0;
+    osm.on('tileerror', () => { if (++f2 === 5) toast('Map tiles are blocked on this network. Markers still work.'); });
+  }
+});
+setTimeout(() => map.invalidateSize(), 300);
+window.addEventListener('resize', () => map.invalidateSize());
+const hospLayer = L.layerGroup().addTo(map);
+const legend = L.control({position: 'bottomleft'});
+legend.onAdd = () => {
+  const d = L.DomUtil.create('div', 'legend');
+  d.innerHTML = Object.entries(COL).map(([k, c]) => `<div><span class="dot" style="background:${c}"></span>${k}</div>`).join('')
+    + `<div><span class="dot" style="background:#4cc38a;border-radius:2px"></span>Ambulance (available)</div>`
+    + `<div><span class="dot" style="background:#4c9aff;border-radius:2px"></span>Ambulance (busy)</div>`
+    + `<div><span class="dot" style="background:#b388ff"></span>Hospital</div>`;
+  return d;
+};
+legend.addTo(map);
+
+function drawHospitals() {
+  hospLayer.clearLayers();
+  hosp.forEach(h => {
+    const p = ll(h); if (!p[0]) return;
+    L.circleMarker(p, {radius: 5, color: '#b388ff', fillColor: '#b388ff', fillOpacity: .8, weight: 1})
+      .bindTooltip(esc(h.name || h.hospital_id || 'Hospital')).addTo(hospLayer);
+  });
 }
 
-async function refresh() {
-  const [ambs, accs] = await Promise.all([
-    fetch('/ambulances').then(r => r.json()),
-    fetch('/accidents').then(r => r.json()),
-  ]);
-  const ambById = Object.fromEntries(ambs.map(a => [a.ambulance_id, a]));
-  const active = accs.filter(a => !DONE.includes(a.status));
-
-  // fetch each route once
-  for (const a of active) {
-    const amb = ambById[a.assigned_ambulance_id];
-    if (amb && !routeCache[a.accident_id]) {
-      const q = `from_lat=${amb.location.lat}&from_lon=${amb.location.lon}` +
-                `&to_lat=${a.location.lat}&to_lon=${a.location.lon}`;
-      const res = await fetch('/route?' + q);
-      if (res.ok) routeCache[a.accident_id] = await res.json();
+// ---------- routes ----------
+function extractPts(r) {
+  for (const k of ['geometry', 'path', 'route', 'coordinates', 'polyline', 'points']) {
+    let a = r && r[k]; if (a && a.coordinates) a = a.coordinates;
+    if (Array.isArray(a) && a.length > 1) {
+      let pts = a.map(p => Array.isArray(p) ? p : [p.lat, p.lon]);
+      if (pts[0][0] > 50) pts = pts.map(p => [p[1], p[0]]);   // [lon,lat] → [lat,lon]
+      return pts;
     }
   }
-
-  markers.clearLayers(); routeLayer.clearLayers();
-  ambs.forEach(a => L.circleMarker([a.location.lat, a.location.lon],
-      { radius: 8, color: '#04222f', weight: 2, fillColor: AMB[a.status] || '#64748b', fillOpacity: 1 })
-    .bindPopup(`<b>${a.ambulance_id}</b><br>${a.base_name}<br>${a.status}`).addTo(markers));
-  active.forEach(a => {
-    L.circleMarker([a.location.lat, a.location.lon],
-      { radius: 11, color: '#fff', weight: 2, fillColor: SEV[a.severity], fillOpacity: 0.95 })
-      .bindPopup(`<b>${a.accident_id}</b><br>${a.severity} · ${a.status}`).addTo(markers);
-    const r = routeCache[a.accident_id];
-    if (r) L.polyline(r.route, { color: '#38bdf8', weight: 4, opacity: 0.85 }).addTo(routeLayer);
-  });
-
-  document.getElementById('k-active').textContent = active.length;
-  document.getElementById('k-wait').textContent = active.filter(a => a.status === 'AWAITING_AMBULANCE').length;
-  document.getElementById('k-disp').textContent = ambs.filter(a => a.status !== 'AVAILABLE').length;
-  document.getElementById('k-free').textContent = ambs.filter(a => a.status === 'AVAILABLE').length;
-
-  document.getElementById('list').innerHTML = active.map(a => {
-    const r = routeCache[a.accident_id];
-    const eta = r ? ` · ETA ${r.estimated_time_min} min · ${r.distance_km} km` : '';
-    const who = a.assigned_ambulance_id ? ` · ${a.assigned_ambulance_id}` : '';
-    const btn = a.assigned_ambulance_id
-      ? `<button onclick="event.stopPropagation();advance('${a.accident_id}')">Advance</button>` : '';
-    return `<div class="item" onclick="map.flyTo([${a.location.lat},${a.location.lon}],14)">
-      <span class="sev" style="background:${SEV[a.severity]}">${a.severity}</span><b>${a.accident_id}</b>
-      <div class="sub"><span>${a.status.replaceAll('_',' ')}${who}${eta}</span>${btn}</div></div>`;
-  }).join('') || '<div class="item" style="color:var(--mute)">No active incidents. Click the map to report one.</div>';
+  return null;
+}
+async function loadRoute(a, amb) {
+  const key = a.accident_id + ':' + amb.ambulance_id;
+  if (key in routes) return;
+  routes[key] = null;
+  const [f1, f2] = ll(amb), [t1, t2] = ll(a);
+  try {
+    const r = await api(`/route?from_lat=${f1}&from_lon=${f2}&to_lat=${t1}&to_lon=${t2}`);
+    routes[key] = {pts: extractPts(r) || [[f1, f2], [t1, t2]], straight: !extractPts(r),
+      eta: r.eta_min ?? r.estimated_time_min ?? r.duration_min, km: r.distance_km, src: r.source};
+    render();
+  } catch (e) { routes[key] = {pts: [[f1, f2], [t1, t2]], straight: true}; render(); }
 }
 
+// ---------- render ----------
+function render() {
+  const active = accs.filter(a => a.status !== 'RESOLVED');
+  const count = s => accs.filter(a => a.status === s).length;
+  const avail = ambs.filter(a => a.status === 'AVAILABLE').length;
+  $('kpis').innerHTML = [
+    [active.length, 'Active incidents'], [count('AWAITING_AMBULANCE'), 'Awaiting ambulance'],
+    [count('AMBULANCE_ASSIGNED') + count('EN_ROUTE'), 'Responding'], [count('RESOLVED'), 'Resolved'],
+    [`${avail}/${ambs.length}`, 'Ambulances free']
+  ].map(([v, l]) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('');
+
+  // list
+  const order = (a, b) => (SEV[a.severity] ?? 9) - (SEV[b.severity] ?? 9)
+    || new Date(b.reported_at) - new Date(a.reported_at);
+  const done = accs.filter(a => a.status === 'RESOLVED').sort(order).slice(0, 5);
+  const LIMIT = 30, sortedActive = active.sort(order), hidden = Math.max(0, sortedActive.length - LIMIT);
+  const rows = [...sortedActive.slice(0, LIMIT), ...done];
+  $('list').innerHTML = rows.length ? rows.map(a => `
+    <div class="card ${a.status === 'RESOLVED' ? 'done' : ''} ${a.accident_id === sel ? 'sel' : ''}"
+         style="border-left-color:${sevColor(a.severity)}" data-id="${esc(a.accident_id)}">
+      <div class="row"><span class="tag" style="color:${sevColor(a.severity)}">${esc(a.severity)}</span>
+        <span class="mut">${ago(a.reported_at)}</span></div>
+      <div class="row"><b>${esc(a.accident_id)}</b><span class="mut">${esc(STAT[a.status] || a.status)}</span></div>
+      <div class="mut">${a.assigned_ambulance_id ? 'Ambulance ' + esc(a.assigned_ambulance_id) : 'No ambulance yet'}
+        · ${esc(a.source)}${a.camera_id ? ' (' + esc(a.camera_id) + ')' : ''}</div>
+    </div>`).join('') + (hidden ? `<div class="empty">+${hidden} more active incidents not shown (most severe and newest first)</div>` : '')
+    : '<div class="empty">No incidents yet. Use “Simulate accident” or start a camera agent.</div>';
+  $('list').querySelectorAll('.card').forEach(c => c.onclick = () => select(c.dataset.id, true));
+
+  // incident markers
+  const seen = new Set();
+  accs.filter(a => a.status !== 'RESOLVED').forEach(a => {
+    seen.add(a.accident_id);
+    const icon = L.divIcon({className: '', iconSize: [22, 22], html:
+      `<div class="inc ${a.status === 'AWAITING_AMBULANCE' ? 'pulse' : ''} ${a.accident_id === sel ? 'sel' : ''}"
+            style="background:${sevColor(a.severity)}"></div>`});
+    let m = mInc.get(a.accident_id);
+    if (!m) { m = L.marker(ll(a), {icon}).addTo(map); m.on('click', () => select(a.accident_id, false)); mInc.set(a.accident_id, m); }
+    else { m.setIcon(icon); m.setLatLng(ll(a)); }
+  });
+  for (const [id, m] of mInc) if (!seen.has(id)) { map.removeLayer(m); mInc.delete(id); }
+
+  // ambulance markers
+  const seenA = new Set();
+  ambs.forEach(a => {
+    const p = ll(a); if (!p[0]) return;
+    seenA.add(a.ambulance_id);
+    const style = {radius: 6, weight: 1, color: '#fff', fillOpacity: .95,
+      fillColor: AMB_COL[a.status] || '#4c9aff'};
+    let m = mAmb.get(a.ambulance_id);
+    if (!m) { m = L.circleMarker(p, style).addTo(map); mAmb.set(a.ambulance_id, m); }
+    else { m.setLatLng(p); m.setStyle(style); }
+    m.bindTooltip(`${esc(a.ambulance_id)} · ${esc(a.status)}`);
+  });
+  for (const [id, m] of mAmb) if (!seenA.has(id)) { map.removeLayer(m); mAmb.delete(id); }
+
+  // routes for responding incidents
+  const keep = new Set();
+  accs.filter(a => ['AMBULANCE_ASSIGNED', 'EN_ROUTE'].includes(a.status) && a.assigned_ambulance_id).forEach(a => {
+    const amb = ambs.find(x => x.ambulance_id === a.assigned_ambulance_id); if (!amb) return;
+    const key = a.accident_id + ':' + amb.ambulance_id;
+    const r = routes[key];
+    if (r === undefined) return loadRoute(a, amb);
+    if (!r) return;
+    keep.add(key);
+    if (!mRoute.has(key)) mRoute.set(key, L.polyline(r.pts, {color: '#4c9aff', weight: 4, opacity: .85,
+      dashArray: r.straight ? '6 8' : null}).addTo(map));
+  });
+  for (const [k, l] of mRoute) if (!keep.has(k)) { map.removeLayer(l); mRoute.delete(k); }
+  renderDetail();
+}
+
+function renderDetail() {
+  const a = accs.find(x => x.accident_id === sel);
+  if (!a) { $('detail').innerHTML = '<div class="empty">Select an incident to see details.</div>'; return; }
+  const r = routes[a.accident_id + ':' + a.assigned_ambulance_id];
+  const w = a.weather || {};
+  const frame = a.frame_path ? '/frames/' + a.frame_path.split('/').pop() : null;
+  const nxt = NEXT[a.status];
+  const val = v => v == null ? 'unknown' : esc(v);
+  $('detail').innerHTML = `
+    <h3><span style="color:${sevColor(a.severity)}">${esc(a.severity)}</span> · ${esc(a.accident_id)}</h3>
+    <div class="mut">${esc(a.description || '')}</div>
+    <dl>
+      <dt>Status</dt><dd>${esc(STAT[a.status] || a.status)}</dd>
+      <dt>Ambulance</dt><dd>${a.assigned_ambulance_id ? esc(a.assigned_ambulance_id) : '—'}</dd>
+      <dt>ETA / distance</dt><dd>${r && r.eta != null ? Math.round(r.eta * 10) / 10 + ' min' : '—'}${r && r.km != null ? ' · ' + r.km + ' km' : ''}</dd>
+      <dt>Vehicles involved</dt><dd>${val(a.vehicle_count)}</dd>
+      <dt>People nearby (approx.)</dt><dd>${val(a.people_count)}</dd>
+      <dt>Detection confidence</dt><dd>${a.detection_confidence != null ? Math.round(a.detection_confidence * 100) + '%' : 'unknown'}</dd>
+      <dt>Road / weather</dt><dd>${val(a.road_type)} · ${esc(w.summary || '—')}${w.temperature_c != null ? ', ' + w.temperature_c + ' °C' : ''}</dd>
+      <dt>Reported</dt><dd>${ago(a.reported_at)}</dd>
+    </dl>
+    <div class="row">
+      ${a.status === 'AWAITING_AMBULANCE' ? '<button class="primary" id="dDispatch">Dispatch now</button>' : '<span></span>'}
+      ${nxt ? `<button id="dAdvance">Mark ${esc(STAT[nxt].toLowerCase())}</button>` : ''}
+    </div>
+    ${frame ? `<img src="${esc(frame)}" alt="Detection frame" onerror="this.remove()">` : ''}`;
+  const d = $('dDispatch'); if (d) d.onclick = dispatch;
+  const v = $('dAdvance'); if (v) v.onclick = () => advance(a.accident_id);
+}
+
+function select(id, fly) {
+  sel = id;
+  const a = accs.find(x => x.accident_id === id);
+  if (fly && a) map.flyTo(ll(a), 14, {duration: .6});
+  render();
+}
+
+// ---------- actions ----------
 async function dispatch() {
-  const s = document.getElementById('strategy').value;
-  const res = await fetch('/dispatch?strategy=' + s, { method: 'POST' });
-  const out = await res.json();
-  toast(out.length ? `Dispatched ${out.length} ambulance(s) using ${s}` : 'Nothing to dispatch');
-  refresh();
+  const pending = accs.filter(a => a.status === 'AWAITING_AMBULANCE').length;
+  try {
+    const out = await api('/dispatch?strategy=' + $('strategy').value, {method: 'POST'});
+    if (!out.length) toast(pending ? 'NO AVAILABLE AMBULANCE for ' + pending + ' pending incident(s)' : 'Nothing pending');
+    else toast(out.map(o => `${o.accident_id} → ${o.ambulance_id} (${o.eta_min} min)`).join('\n'));
+    refresh();
+  } catch (e) { toast('Dispatch failed: ' + e.message); }
 }
-
 async function advance(id) {
-  const res = await fetch(`/accidents/${id}/advance`, { method: 'POST' });
-  if (!res.ok) toast((await res.json()).detail);
-  refresh();
+  try { await api(`/accidents/${id}/advance`, {method: 'POST'}); refresh(); }
+  catch (e) { toast('Could not advance: ' + e.message); }
+}
+async function simulate() {
+  const sevs = ['LOW', 'MEDIUM', 'MEDIUM', 'HIGH', 'CRITICAL'];
+  const body = {
+    location: {lat: 22.72 + (Math.random() - .5) * .08, lon: 75.86 + (Math.random() - .5) * .08},
+    severity: sevs[Math.floor(Math.random() * sevs.length)],
+    source: 'manual', description: 'Simulated accident (dashboard demo)'
+  };
+  try {
+    const a = await api('/accidents', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
+    toast('Created ' + a.accident_id); await refresh(); select(a.accident_id, true);
+  } catch (e) { toast('Could not create incident: ' + e.message); }
 }
 
-map.on('click', async e => {
-  const res = await fetch('/accidents', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ location: { lat: e.latlng.lat, lon: e.latlng.lng },
-                           severity: document.getElementById('sev').value }),
-  });
-  if (!res.ok) toast((await res.json()).detail);
-  refresh();
-});
+$('btnDispatch').onclick = dispatch;
+$('btnSim').onclick = simulate;
+$('btnReset').onclick = async () => {
+  if (!confirm('Delete ALL incidents and notifications and free every ambulance?')) return;
+  try {
+    await api('/demo/reset', {method: 'POST'});
+    Object.keys(routes).forEach(k => delete routes[k]); sel = null;
+    toast('Demo reset'); refresh();
+  } catch (e) { toast('Reset failed: ' + e.message); }
+};
+setInterval(() => {
+  if ($('auto').checked && accs.some(a => a.status === 'AWAITING_AMBULANCE')) dispatch();
+}, 20000);
 
+async function refresh() {
+  try {
+    [accs, ambs] = await Promise.all([api('/accidents'), api('/ambulances')]);
+    if (!hosp.length) { hosp = await api('/hospitals').catch(() => []); drawHospitals(); }
+    $('err').hidden = true;
+  } catch (e) { $('err').hidden = false; $('err').textContent = 'Cannot reach the server: ' + e.message; return; }
+  render();
+}
 refresh();
 setInterval(refresh, 3000);
+setInterval(showDbg, 1000);
 </script>
 </body>
 </html>

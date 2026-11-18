@@ -21,7 +21,7 @@ export default function KpiCard({ title, value, severity }: Props) {
   return (
     <div className="p-4 rounded bg-panel border" style={{ borderColor }}>
       <h3 className="text-sm text-gray-400 mb-1">{title}</h3>
-      <p className="text-2xl font-mono" style={{ color: borderColor }}>{value}</p>
+      <p className="text-2xl font-mono" style={{ color: severity ? borderColor : '#e6edf3' }}>{value}</p>
     </div>
   );
 }

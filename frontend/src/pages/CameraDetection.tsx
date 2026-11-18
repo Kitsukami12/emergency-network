@@ -20,18 +20,11 @@ export default function CameraDetection() {
   const [selectedAccident, setSelectedAccident] = useState<Accident | null>(null);
   const queryClient = useQueryClient();
 
-  const uploadMutation = useMutation((f: File) => uploadVideo(f), {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['accidents']);
-    },
-  });
+  const uploadMutation = useMutation({ mutationFn: (f: File) => uploadVideo(f), onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['accidents'] });
+    } });
 
-  const verifyMutation = useMutation(
-    ({ id, status }: { id: string; status: string }) => patchAccidentStatus(id, status),
-    {
-      onSuccess: () => queryClient.invalidateQueries(['accidents']),
-    },
-  );
+  const verifyMutation = useMutation({ mutationFn: ({ id, status }: { id: string; status: string }) => patchAccidentStatus(id, status), onSuccess: () => queryClient.invalidateQueries({ queryKey: ['accidents'] }) });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) setFile(e.target.files[0]);
@@ -42,7 +35,7 @@ export default function CameraDetection() {
   };
 
   // Pull list of accidents needing verification for display
-  const { data: accidents = [], isLoading } = useQuery(['accidents'], fetchAccidents);
+  const { data: accidents = [], isLoading } = useQuery({ queryKey: ['accidents'], queryFn: fetchAccidents });
   const pending = accidents.filter((a) => a.status === 'NEEDS_VERIFICATION');
 
   return (
@@ -53,9 +46,9 @@ export default function CameraDetection() {
         <button
           className="px-4 py-2 rounded bg-accent text-black disabled:opacity-50"
           onClick={handleUpload}
-          disabled={!file || uploadMutation.isLoading}
+          disabled={!file || uploadMutation.isPending}
         >
-          {uploadMutation.isLoading ? 'Uploading…' : 'Upload Video'}
+          {uploadMutation.isPending ? 'Uploading…' : 'Upload Video'}
         </button>
       </div>
 
