@@ -19,6 +19,10 @@ CFG = dict(
     dup_cover=0.85,    # same-class box mostly inside another = duplicate detection
     hold_s=2.5,        # keep the alarm up this long after a collision cue
     people_radius=1.5, # people within this many box sizes of the crash count as nearby
+    decel_ratio=0.3,   # decelerated = speed fell below this fraction of its recent peak
+    fresh_s=2.0,       # contact must have started within this many seconds (queues are ignored)
+    hold_score=0.5,    # score while the alarm is held; below TemporalRule's threshold, so it
+                       # does not count toward raising a second alarm
 )
 
 
@@ -74,6 +78,7 @@ class CollisionAnalyzer:
         self.next_id = 1
         self.hold_until = -1e9
         self.hold_info = None
+        self.apart = {}   # (tid, tid) -> last time this pair was NOT in contact
 
     # ---- tracking -------------------------------------------------------------
     def _update_tracks(self, vehicles, t):
@@ -129,7 +134,7 @@ class CollisionAnalyzer:
 
     def _decelerated(self, tr, t):
         c, peak = self.cfg, self._peak(tr, t)
-        return peak >= c["moving"] and tr.ema < 0.5 * peak
+        return peak >= c["moving"] and tr.ema < c["decel_ratio"] * peak
 
     def _stopped_suddenly(self, tr, t):
         return self._peak(tr, t) >= self.cfg["moving"] and tr.ema <= self.cfg["stopped"]
@@ -146,11 +151,19 @@ class CollisionAnalyzer:
                    if tr.age >= c["min_age"] and tr.last_t == t]
 
         involved, peak = set(), 0.0
+        self.apart = {k: v for k, v in self.apart.items()
+                      if k[0] in self.tracks and k[1] in self.tracks}
         for i in range(len(trusted)):
             for j in range(i + 1, len(trusted)):
                 a, b = trusted[i], trusted[j]
-                if iou(a.box, b.box) >= c["overlap_iou"] and (
-                        self._decelerated(a, t) or self._decelerated(b, t)):
+                key = (min(a.tid, b.tid), max(a.tid, b.tid))
+                if iou(a.box, b.box) < c["overlap_iou"]:
+                    self.apart[key] = t
+                    continue
+                # contact that has lasted a long time is a queue or occlusion, not a crash
+                if t - self.apart.get(key, -1e9) > c["fresh_s"]:
+                    continue
+                if self._decelerated(a, t) or self._decelerated(b, t):
                     involved |= {a.tid, b.tid}
         for tid in involved:
             peak = max(peak, self._peak(self.tracks[tid], t))
@@ -172,7 +185,7 @@ class CollisionAnalyzer:
             }
             score = 0.9
         elif t < self.hold_until:
-            score = 0.85
+            score = c["hold_score"]
         elif lone_stop:
             score = 0.45
         else:
