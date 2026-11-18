@@ -22,3 +22,27 @@ results/
 cache/
 
 cameras.local.json
+
+# secrets and local config
+.env
+.env.*
+!.env.example
+!frontend/.env.example
+cameras.local.json
+
+# data, caches and generated output
+data/clips/
+data/videos/
+cache/
+results/frames/
+results/clips/
+results/dets/
+results/trigger*
+review*/
+eval_*.txt
+sweep_out.txt
+trigger_*.png
+before_*.png
+node_modules/
+frontend/dist/
+_scratch/

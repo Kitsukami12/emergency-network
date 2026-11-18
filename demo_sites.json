@@ -1,0 +1,8 @@
+[
+  {"id": "demo-rajwada",   "name": "Rajwada Square",     "lat": 22.7185, "lon": 75.8553, "clip": "1.mp4", "severity": "HIGH"},
+  {"id": "demo-palasia",   "name": "Palasia Square",     "lat": 22.7244, "lon": 75.8839, "clip": "2.mp4", "severity": "MEDIUM"},
+  {"id": "demo-vijaynagar","name": "Vijay Nagar Square", "lat": 22.7490, "lon": 75.8930, "clip": "3.mp4", "severity": "CRITICAL"},
+  {"id": "demo-bhawarkuan","name": "Bhawarkuan Square",  "lat": 22.6943, "lon": 75.8689, "clip": "1.mp4", "severity": "MEDIUM"},
+  {"id": "demo-sarwate",   "name": "Sarwate Bus Stand",  "lat": 22.7149, "lon": 75.8696, "clip": "2.mp4", "severity": "HIGH"},
+  {"id": "demo-lig",       "name": "LIG Square",         "lat": 22.7370, "lon": 75.8800, "clip": "3.mp4", "severity": "MEDIUM"}
+]

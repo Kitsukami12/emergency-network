@@ -1,6 +1,8 @@
 import json
+from pathlib import Path
 import os
 from datetime import datetime, timedelta, timezone
+import random
 import secrets
 import base64
 
@@ -28,6 +30,7 @@ from app.core.enums import AccidentStatus, AmbulanceStatus
 from app.core.schemas import Accident, AccidentReport, Ambulance
 from app.core.seeds import load_ambulances
 from app.services.dispatch import STRATEGIES, dispatch_pending
+from app.services import progress
 from app.services.notify import notify_nearest
 from app.services.routing import road_type_at
 from app.services.traffic import best_route
@@ -62,9 +65,11 @@ async def lifespan(app: FastAPI):
     db.seed_hospitals(json.loads(HOSPITALS_SEED.read_text()))
     threading.Thread(target=_warm_up, daemon=True).start()
     task = asyncio.create_task(_batch_loop()) if BATCH_S > 0 else None
+    prog = asyncio.create_task(_progress_loop()) if AUTO_PROGRESS else None
     yield
-    if task:
-        task.cancel()
+    for t in (task, prog):
+        if t:
+            t.cancel()
 
 
 app = FastAPI(title="AI Emergency Response Network", lifespan=lifespan)
@@ -90,6 +95,9 @@ async def require_login(request: Request, call_next):
     return Response("Login required", status_code=401,
                     headers={"WWW-Authenticate": 'Basic realm="Emergency Network"'})
 app.mount("/frames", StaticFiles(directory=FRAMES_DIR), name="frames")
+CLIPS_DIR = ROOT / "results" / "clips"
+CLIPS_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/clips", StaticFiles(directory=CLIPS_DIR), name="clips")
 
 NEXT_STATUS = {
     AccidentStatus.AMBULANCE_ASSIGNED: AccidentStatus.EN_ROUTE,
@@ -161,7 +169,7 @@ def _notify_and_dispatch(accident):
         t = perf_counter()
         if BATCH_S <= 0:
             try:
-                dispatch_pending("hungarian")
+                _run_dispatch("hungarian")
             except Exception as e:
                 print("dispatch failed:", e)
         print(f"timing {accident.accident_id}: notify {t_notify:.2f}s, "
@@ -172,12 +180,36 @@ async def _batch_loop():
     def run():
         with _dispatch_lock:
             try:
-                dispatch_pending("hungarian")
+                _run_dispatch("hungarian")
             except Exception as e:
                 print("dispatch failed:", e)
     while True:
         await asyncio.sleep(BATCH_S)
         await asyncio.to_thread(run)
+
+
+AUTO_PROGRESS = os.getenv("AUTO_PROGRESS", "1") != "0"   # 0 = only the manual advance buttons
+
+
+def _run_dispatch(strategy="hungarian"):
+    out = dispatch_pending(strategy)
+    progress.record(out)              # keep each ETA so the journey can be timed from it
+    return out
+
+
+def _progress_once():
+    with _dispatch_lock:
+        for event in progress.tick():
+            print("journey:", event)
+
+
+async def _progress_loop():
+    while True:
+        await asyncio.sleep(5)
+        try:
+            await asyncio.to_thread(_progress_once)
+        except Exception as e:
+            print("progress failed:", e)
 
 
 @app.get("/health")
@@ -228,6 +260,13 @@ def report_accident(report: AccidentReport, background: BackgroundTasks,
         existing = _recent_camera_incident(report.camera_id)
         if existing:                       # same camera, same ongoing incident: do not duplicate
             return existing
+    if not report.frame_path and report.source != "camera":
+        pool = sorted(FRAMES_DIR.glob("demo_pool_*.jpg"))      # simulated incident: borrow a recorded frame
+        if pool:
+            report = report.model_copy(update={
+                "frame_path": str(random.choice(pool)),
+                "description": ((report.description or "")
+                                + " [demo: replayed frame from a recorded accident clip]").strip()})
     weather = get_weather(loc.lat, loc.lon)
     road = road_type_at(loc.lat, loc.lon)
     accident = db.add_accident(report, weather=weather, road_type=road)
@@ -271,6 +310,53 @@ def advance(accident_id: str):
     return updated
 
 
+@app.get("/accidents/{accident_id}/media")
+def accident_media(accident_id: str):
+    """Frame and recording for one incident. Paths are relative to the API root."""
+    acc = db.get_accident(accident_id)
+    if acc is None:
+        raise HTTPException(404, "Accident not found")
+    frame = Path(acc.frame_path) if acc.frame_path else None
+    clip = CLIPS_DIR / f"{frame.stem}.mp4" if frame else None
+    return {
+        "frame": f"frames/{frame.name}" if frame and (FRAMES_DIR / frame.name).exists() else None,
+        "clip": f"clips/{clip.name}" if clip and clip.exists() else None,
+    }
+
+
+@app.get("/cameras")
+def get_cameras():
+    """Camera sites for the map. Stream URLs are never returned (they contain passwords)."""
+    out = []
+    for name, demo in (("cameras.local.json", False), ("demo_sites.json", True)):
+        f = ROOT / name
+        if f.exists():
+            for c in json.loads(f.read_text()):
+                out.append({"id": c["id"], "name": c.get("name", c["id"]),
+                            "lat": c["lat"], "lon": c["lon"], "demo": demo})
+    return out
+
+
+@app.get("/assignments")
+def get_assignments():
+    """accident_id -> the hospital it was sent to (latest notification), with its location."""
+    hospitals = {h["hospital_id"]: h for h in db.list_hospitals()}
+    out = {}
+    for n in db.list_notifications():
+        h = hospitals.get(n["hospital_id"])
+        if h is None:
+            continue
+        cur = out.get(n["accident_id"])
+        if cur is None or n["created_at"] > cur["notified_at"]:
+            out[n["accident_id"]] = {
+                "hospital_id": h["hospital_id"], "hospital": h["name"],
+                "lat": h["lat"], "lon": h["lon"],
+                "scene_to_hospital_min": (n.get("payload") or {}).get("scene_to_hospital_min"),
+                "notification_status": n["status"], "notified_at": n["created_at"],
+            }
+    return out
+
+
 @app.get("/route")
 def get_route(from_lat: float, from_lon: float, to_lat: float, to_lon: float):
     result = best_route(from_lat, from_lon, to_lat, to_lon)
@@ -284,7 +370,7 @@ def dispatch(strategy: str = "hungarian"):
     if strategy not in STRATEGIES:
         raise HTTPException(400, f"strategy must be one of {list(STRATEGIES)}")
     with _dispatch_lock:
-        return dispatch_pending(strategy)
+        return _run_dispatch(strategy)
 
 
 @app.get("/notifications")
