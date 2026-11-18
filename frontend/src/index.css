@@ -1,15 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0B1020;
-  --color-panel: #121A2E;
-  --color-border: #1F2A44;
-  --color-accent: #22D3EE;
-  --color-low: #22C55E;
-  --color-medium: #F59E0B;
-  --color-high: #F97316;
-  --color-critical: #EF4444;
+  --color-background: #0F1620;
+  --color-panel: #17212D;
+  --color-raised: #1E2B3A;
+  --color-border: #2A3746;
+  --color-accent: #4CC9F0;
+  --color-low: #3E9B7A;
+  --color-medium: #F5C542;
+  --color-high: #F76B15;
+  --color-critical: #E5484D;
 
-  --font-sans: 'Inter', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'Atkinson Hyperlegible', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
 }
+
+html, body, #root { height: 100%; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: #0F1620;
+  color: #E8EDF2;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: #4CC9F0; color: #0F1620; }
+:focus-visible { outline: 2px solid #4CC9F0; outline-offset: 2px; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: #2A3746; border-radius: 6px; border: 2px solid #0F1620; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* chrome */
+.tab-link { transition: color 120ms ease, border-color 120ms ease; }
+.tab-link:hover { color: #E8EDF2 !important; }
+.tabs-scroll { scrollbar-width: none; }
+.tabs-scroll::-webkit-scrollbar { display: none; }
+
+/* home page */
+.card-link { transition: border-color 140ms ease, transform 140ms ease, background 140ms ease; }
+.card-link:hover { border-color: #4CC9F0 !important; background: #1E2B3A !important; transform: translateY(-2px); }
+.btn-primary { transition: filter 120ms ease; }
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-ghost { transition: border-color 120ms ease, background 120ms ease; }
+.btn-ghost:hover { border-color: #4CC9F0 !important; background: #17212D !important; }
+@media (prefers-reduced-motion: reduce) {
+  .card-link { transition: none; }
+  .card-link:hover { transform: none; }
+}
+
+/* skin for every console page except the Command Center (App.tsx sets data-skin) */
+main[data-skin="on"] h1 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #E8EDF2;
+  margin: 0 0 4px;
+}
+main[data-skin="on"] h2,
+main[data-skin="on"] h3 {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: #8A99A8;
+}
+main[data-skin="on"] h2::before,
+main[data-skin="on"] h3::before { content: '// '; color: #4CC9F0; }
+
+main[data-skin="on"] [class*="rounded"] { border-radius: 8px; }
+
+main[data-skin="on"] input:not([type="file"]):not([type="checkbox"]):not([type="radio"]),
+main[data-skin="on"] select,
+main[data-skin="on"] textarea {
+  background: #0F1620;
+  border: 1px solid #2A3746;
+  border-radius: 6px;
+  color: #E8EDF2;
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
+main[data-skin="on"] input:focus,
+main[data-skin="on"] select:focus,
+main[data-skin="on"] textarea:focus { border-color: #4CC9F0; outline: 1px solid #4CC9F0; outline-offset: 0; }
+
+main[data-skin="on"] input[type="file"]::file-selector-button {
+  background: #1E2B3A;
+  border: 1px solid #2A3746;
+  border-radius: 6px;
+  color: #E8EDF2;
+  font-family: var(--font-sans);
+  padding: 6px 12px;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+main[data-skin="on"] button {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: filter 120ms ease, transform 120ms ease;
+}
+main[data-skin="on"] button:hover { filter: brightness(1.1); }
+main[data-skin="on"] button:active { transform: translateY(1px); }
+
+.recharts-text,
+.recharts-cartesian-axis-tick-value { font-family: var(--font-mono); font-size: 11px; fill: #8A99A8; }
+.recharts-cartesian-grid line { stroke: #2A3746; }
+/* dark maps */
+.leaflet-container { background: #0F1620; font-family: var(--font-sans); }
+.leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9) saturate(0.7);
+}
+
+.leaflet-bar { border: 1px solid #2A3746 !important; box-shadow: none !important; }
+.leaflet-bar a { background: #17212D; color: #E8EDF2; border-bottom: 1px solid #2A3746; }
+.leaflet-bar a:hover { background: #1E2B3A; color: #E8EDF2; }
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: #17212D;
+  color: #E8EDF2;
+  border: 1px solid #2A3746;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.leaflet-control-attribution { background: rgba(15, 22, 32, 0.85) !important; color: #8A99A8 !important; }
+.leaflet-control-attribution a { color: #8A99A8 !important; }
